@@ -11,39 +11,25 @@ public class game_logic : MonoBehaviour {
 	public Slider TimerSlider;
 	public Text RightText;
 	public Text WrongText;
-	public Text QuestionText;
 	public Image QuestionImage;
-
-
-	//private string Question= "Color of the sky?"; 
-	//private string Answer_1 = "blue";
-	//private string Answer_2 = "red";
-	//private string RightAnswer = "blue";
-
-
+	public Text ScoreHandler;
 
 	private const float TimeLimit = 0.5f;
 	private float UIUpdateTimer = TimeLimit;
 	private bool StartTimer = false;
-
+	private int score = 0;
 
 	private Question CurrentQuestion;
 
-
 	// Use this for initialization
 	void Start () {
-
-		///content.Instantiate ();
-
 		CurrentQuestion = GetComponent<content> ().getQuestion();
 
-		//button1 = GameObject.Find ("alt_1");
-		//button2 = GameObject.Find ("alt_2");
+		//listeners for buttons
 		button1.onClick.AddListener(() => ButtonClicked(button1));
 		button2.onClick.AddListener(() => ButtonClicked(button2));
 
-
-		//set Question
+		//Remove right wrong text
 		RightText.GetComponent<Text> ().enabled = false;
 		WrongText.GetComponent<Text> ().enabled = false;
 
@@ -51,7 +37,14 @@ public class game_logic : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
-		TimerSlider.value -= 0.05f;
+		TimerSlider.value -= 0.1f;
+
+		ScoreHandler.GetComponent<Text> ().text = "Score: " + score;
+
+		if (TimerSlider.GetComponent<Slider>().value <= 0) {
+
+			//game over!
+		}
 	}
 	
 	// Update is called once per frame
@@ -67,7 +60,6 @@ public class game_logic : MonoBehaviour {
 				StartTimer = false;
 			}
 		}
-
 	}
 
 	public void ButtonClicked(Button btn){
@@ -77,9 +69,7 @@ public class game_logic : MonoBehaviour {
 			WrongText.GetComponent<Text> ().enabled = false;
 			StartTimer = true;
 
-
-
-
+			score += 1000;
 
 		} else {
 			RightText.GetComponent<Text> ().enabled = false;
@@ -88,9 +78,6 @@ public class game_logic : MonoBehaviour {
 		}
 
 		//get new question
-		//button1.GetComponentInChildren<Text>().text = "Answer 1";
-		//button2.GetComponentInChildren<Text>().text = "Answer 2";
-
 		CurrentQuestion = GetComponent<content> ().getQuestion();
 		loadQuestion ();
 
@@ -99,8 +86,21 @@ public class game_logic : MonoBehaviour {
 	private void loadQuestion() {
 		//set a question
 		//QuestionText.GetComponentInChildren<Text>().text = Question;
-		button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
-		button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+
+		int randomIndex = Random.Range (1, 3);
+
+		if (randomIndex == 1) {
+			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+		}
+		else if (randomIndex == 2) {
+			button2.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+			button1.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+		}
+		else{
+			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+		}
 
 		Sprite temp = Resources.Load<Sprite>("Images/"+CurrentQuestion.imgID);
 

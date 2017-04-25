@@ -39,7 +39,7 @@ public class game_logic : MonoBehaviour {
 	void FixedUpdate(){
 		TimerSlider.value -= 0.1f;
 
-		ScoreHandler.GetComponent<Text> ().text = "Score: " + score;
+		ScoreHandler.GetComponent<Text> ().text = "SCORE: " + score;
 
 		if (TimerSlider.GetComponent<Slider>().value <= 0) {
 
@@ -64,7 +64,7 @@ public class game_logic : MonoBehaviour {
 
 	public void ButtonClicked(Button btn){
 		if (btn.GetComponentInChildren<Text> ().text == CurrentQuestion.correct) {
-			TimerSlider.value += 5;
+			TimerSlider.value += 2;
 			RightText.GetComponent<Text> ().enabled = true;
 			WrongText.GetComponent<Text> ().enabled = false;
 			StartTimer = true;
@@ -75,6 +75,7 @@ public class game_logic : MonoBehaviour {
 			RightText.GetComponent<Text> ().enabled = false;
 			WrongText.GetComponent<Text> ().enabled = true;
 			StartTimer = true;
+			TimerSlider.value -= 4;
 		}
 
 		//get new question

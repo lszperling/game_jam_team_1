@@ -27,19 +27,21 @@ public class content : MonoBehaviour {
 	void Update () {
 
 	}
+		
+	private void LoadQuestions(){
+		TextAsset asset = Resources.Load (Path.Combine ("Questions", "questions")) as TextAsset;
+		questionList = JsonUtility.FromJson<QuestionList> (asset.text);
+	}
 
 	public Question getQuestion() {
 
 		if (questionList.questions.Count == 0) {
-			TextAsset asset = Resources.Load (Path.Combine ("Questions", "questions")) as TextAsset;
-			questionList = JsonUtility.FromJson<QuestionList> (asset.text);
-			Debug.Log ("apekatt");
-			Debug.Log (questionList.questions [0].correct);
+			LoadQuestions ();
 		}
 			
-
 		int randomIndex = Random.Range (0, questionList.questions.Count);
-		Debug.Log (""+randomIndex+", "+questionList.questions);
-		return questionList.questions [randomIndex];
+		Question q = questionList.questions [randomIndex];
+		questionList.questions.RemoveAt (randomIndex);
+		return q;
 	}
 }

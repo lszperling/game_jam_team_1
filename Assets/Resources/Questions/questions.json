@@ -6,13 +6,13 @@
       "imgID": "cat"
     },
     {
-      "correct": "Cow",
-      "incorrect": "Dog",
+      "correct": "Dog",
+      "incorrect": "Cow",
       "imgID": "dog"
     },
     {
-      "correct": "Hamster",
-      "incorrect": "Mouse",
+      "correct": "Mouse",
+      "incorrect": "Hamster",
       "imgID": "mouse"
     }
   ]

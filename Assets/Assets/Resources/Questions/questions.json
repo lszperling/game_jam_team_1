@@ -1,0 +1,19 @@
+{
+  "questions": [
+      {
+      "correct": "Cat",
+      "incorrect": "Dog",
+      "imgID": "cat"
+    },
+    {
+      "correct": "Cow",
+      "incorrect": "Dog",
+      "imgID": "dog"
+    },
+    {
+      "correct": "Hamster",
+      "incorrect": "Mouse",
+      "imgID": "mouse"
+    }
+  ]
+}

@@ -22,14 +22,16 @@ public class game_logic : MonoBehaviour {
 	private const float TimeLimit = 0.5f;
 	private float UIUpdateTimer = TimeLimit;
 	private bool StartTimer = false;
-	private int score = 0;
-	private bool Paused = false;
+	//private bool Paused = false;
 
 	private Question CurrentQuestion;
+
+	private ScoreKeeper ScoreKeep;
 
 	// Use this for initialization
 	void Start () {
 		CurrentQuestion = GetComponent<content> ().getQuestion();
+		ScoreKeep = GetComponent<ScoreKeeper> ();
 
 		//listeners for buttons
 		button1.onClick.AddListener(() => ButtonClicked(button1));
@@ -45,7 +47,7 @@ public class game_logic : MonoBehaviour {
 	void FixedUpdate(){
 		TimerSlider.value -= 0.1f;
 
-		ScoreHandler.GetComponent<Text> ().text = "SCORE: " + score;
+		ScoreHandler.GetComponent<Text> ().text = "SCORE: " + ScoreKeep.currentScore;
 
 		if (TimerSlider.GetComponent<Slider>().value <= 0) {
 
@@ -77,13 +79,14 @@ public class game_logic : MonoBehaviour {
 			WrongText.GetComponent<Text> ().enabled = false;
 			StartTimer = true;
 
-			score += 1000;
+			ScoreKeep.answerCorrect ();
 
 		} else {
 			RightText.GetComponent<Text> ().enabled = false;
 			WrongText.GetComponent<Text> ().enabled = true;
 			StartTimer = true;
-			TimerSlider.value -= 4;
+			TimerSlider.value -= 6;
+			ScoreKeep.answerWrong ();
 		}
 
 		//get new question
@@ -93,9 +96,6 @@ public class game_logic : MonoBehaviour {
 	}
 
 	private void loadQuestion() {
-		//set a question
-		//QuestionText.GetComponentInChildren<Text>().text = Question;
-
 		int randomIndex = Random.Range (1, 3);
 
 		if (randomIndex == 1) {
@@ -111,8 +111,6 @@ public class game_logic : MonoBehaviour {
 			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
 		}
 		Sprite temp = Resources.Load<Sprite>("Images/"+CurrentQuestion.imgID);
-
-		Debug.Log (""+temp.name);
 		QuestionImage.GetComponent<Image> ().sprite = temp;
 	}
 }

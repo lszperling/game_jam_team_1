@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
 public class game_logic : MonoBehaviour {
 
@@ -11,11 +12,13 @@ public class game_logic : MonoBehaviour {
 	public Text RightText;
 	public Text WrongText;
 	public Text QuestionText;
+	public Image QuestionImage;
 
-	private string Question= "Color of the sky?"; 
-	private string Answer_1 = "blue";
-	private string Answer_2 = "red";
-	private string RightAnswer = "blue";
+
+	//private string Question= "Color of the sky?"; 
+	//private string Answer_1 = "blue";
+	//private string Answer_2 = "red";
+	//private string RightAnswer = "blue";
 
 
 
@@ -24,8 +27,16 @@ public class game_logic : MonoBehaviour {
 	private bool StartTimer = false;
 
 
+	private Question CurrentQuestion;
+
+
 	// Use this for initialization
 	void Start () {
+
+		///content.Instantiate ();
+
+		CurrentQuestion = GetComponent<content> ().getQuestion();
+
 		//button1 = GameObject.Find ("alt_1");
 		//button2 = GameObject.Find ("alt_2");
 		button1.onClick.AddListener(() => ButtonClicked(button1));
@@ -33,17 +44,10 @@ public class game_logic : MonoBehaviour {
 
 
 		//set Question
-
-
 		RightText.GetComponent<Text> ().enabled = false;
 		WrongText.GetComponent<Text> ().enabled = false;
 
-
-		//set a question
-		QuestionText.GetComponentInChildren<Text>().text = Question;
-		button1.GetComponentInChildren<Text>().text = Answer_1;
-		button2.GetComponentInChildren<Text>().text = Answer_2;
-	
+		loadQuestion ();	
 	}
 
 	void FixedUpdate(){
@@ -67,11 +71,14 @@ public class game_logic : MonoBehaviour {
 	}
 
 	public void ButtonClicked(Button btn){
-		if (btn.GetComponentInChildren<Text> ().text == RightAnswer) {
+		if (btn.GetComponentInChildren<Text> ().text == CurrentQuestion.correct) {
 			TimerSlider.value += 5;
 			RightText.GetComponent<Text> ().enabled = true;
 			WrongText.GetComponent<Text> ().enabled = false;
 			StartTimer = true;
+
+
+
 
 
 		} else {
@@ -84,5 +91,20 @@ public class game_logic : MonoBehaviour {
 		//button1.GetComponentInChildren<Text>().text = "Answer 1";
 		//button2.GetComponentInChildren<Text>().text = "Answer 2";
 
+		CurrentQuestion = GetComponent<content> ().getQuestion();
+		loadQuestion ();
+
+	}
+
+	private void loadQuestion() {
+		//set a question
+		//QuestionText.GetComponentInChildren<Text>().text = Question;
+		button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+		button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+
+		Sprite temp = Resources.Load<Sprite>("Images/"+CurrentQuestion.imgID);
+
+		Debug.Log (""+temp.name);
+		QuestionImage.GetComponent<Image> ().sprite = temp;
 	}
 }

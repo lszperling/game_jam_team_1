@@ -7,7 +7,7 @@ public class ParticleEffect : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		GetComponent<ParticleSystem>().GetComponent<Renderer>().sortingLayerName = "Effects";	
-		GetComponent<ParticleSystem>().enableEmission = true;
+		//GetComponent<ParticleSystem>().enableEmission = true;
 	}
 	
 	// Update is called once per frame

@@ -5,6 +5,7 @@
 Temp/
 *.orig
 Library/
+library/
 Library/*
 
 Library/assetDatabase3

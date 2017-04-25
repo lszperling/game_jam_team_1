@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class game_logic : MonoBehaviour {
 
@@ -43,7 +44,7 @@ public class game_logic : MonoBehaviour {
 
 		if (TimerSlider.GetComponent<Slider>().value <= 0) {
 
-			//game over!
+			SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); 
 		}
 	}
 	
@@ -102,7 +103,6 @@ public class game_logic : MonoBehaviour {
 			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
 			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
 		}
-
 		Sprite temp = Resources.Load<Sprite>("Images/"+CurrentQuestion.imgID);
 
 		Debug.Log (""+temp.name);

@@ -17,6 +17,7 @@ public class game_logic : MonoBehaviour {
 	public Button PauseButton;
 	public GameObject PlayArea;
 	public GameObject GameOver;
+	public Text FinishScore;
 
 
 	private const float TimeLimit = 0.5f;
@@ -54,6 +55,10 @@ public class game_logic : MonoBehaviour {
 			//SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); 
 			PlayArea.SetActive(false);
 			GameOver.SetActive(true);
+			FinishScore.GetComponent<Text> ().text = "Your score: " + ScoreKeep.currentScore;
+			//Text final_thing;
+			//final_thing = GameObject.Find("final_score") as Text;
+			//final_thing.text = Text "hello";
 		}
 	}
 	

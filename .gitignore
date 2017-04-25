@@ -11,3 +11,5 @@ Library/*
 Library/assetDatabase3
 
 Library/metadata/00/00000000000000003000000000000000
+
+*.csproj

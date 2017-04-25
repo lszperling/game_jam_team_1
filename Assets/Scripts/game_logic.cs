@@ -10,6 +10,19 @@ public class game_logic : MonoBehaviour {
 	public Slider TimerSlider;
 	public Text RightText;
 	public Text WrongText;
+	public Text QuestionText;
+
+	private string Question= "Color of the sky?"; 
+	private string Answer_1 = "blue";
+	private string Answer_2 = "red";
+	private string RightAnswer = "blue";
+
+
+
+	private const float TimeLimit = 0.5f;
+	private float UIUpdateTimer = TimeLimit;
+	private bool StartTimer = false;
+
 
 	// Use this for initialization
 	void Start () {
@@ -20,11 +33,16 @@ public class game_logic : MonoBehaviour {
 
 
 		//set Question
-		button1.GetComponentInChildren<Text>().text = "Blue";
-		button2.GetComponentInChildren<Text>().text = "Red";
+
 
 		RightText.GetComponent<Text> ().enabled = false;
 		WrongText.GetComponent<Text> ().enabled = false;
+
+
+		//set a question
+		QuestionText.GetComponentInChildren<Text>().text = Question;
+		button1.GetComponentInChildren<Text>().text = Answer_1;
+		button2.GetComponentInChildren<Text>().text = Answer_2;
 	
 	}
 
@@ -34,30 +52,33 @@ public class game_logic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {	
-		
+
+		if(StartTimer){
+			UIUpdateTimer -= Time.deltaTime;
+			if ( UIUpdateTimer < 0 )
+			{
+				RightText.GetComponent<Text> ().enabled = false;
+				WrongText.GetComponent<Text> ().enabled = false;
+				UIUpdateTimer = TimeLimit;
+				StartTimer = false;
+			}
+		}
+
 	}
 
 	public void ButtonClicked(Button btn){
-
-
-
-		if (btn.GetComponentInChildren<Text> ().text == "Blue") {
-			TimerSlider.value += 1;
+		if (btn.GetComponentInChildren<Text> ().text == RightAnswer) {
+			TimerSlider.value += 5;
 			RightText.GetComponent<Text> ().enabled = true;
 			WrongText.GetComponent<Text> ().enabled = false;
+			StartTimer = true;
+
 
 		} else {
 			RightText.GetComponent<Text> ().enabled = false;
 			WrongText.GetComponent<Text> ().enabled = true;
+			StartTimer = true;
 		}
-
-		//String answer = getAnswer()
-		//if(button1 == answer){
-
-		//}
-
-
-
 
 		//get new question
 		//button1.GetComponentInChildren<Text>().text = "Answer 1";

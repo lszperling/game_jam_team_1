@@ -14,11 +14,16 @@ public class game_logic : MonoBehaviour {
 	public Text WrongText;
 	public Image QuestionImage;
 	public Text ScoreHandler;
+	public Button PauseButton;
+	public GameObject PlayArea;
+	public GameObject GameOver;
+
 
 	private const float TimeLimit = 0.5f;
 	private float UIUpdateTimer = TimeLimit;
 	private bool StartTimer = false;
 	private int score = 0;
+	private bool Paused = false;
 
 	private Question CurrentQuestion;
 
@@ -44,7 +49,9 @@ public class game_logic : MonoBehaviour {
 
 		if (TimerSlider.GetComponent<Slider>().value <= 0) {
 
-			SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); 
+			//SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); 
+			PlayArea.SetActive(false);
+			GameOver.SetActive(true);
 		}
 	}
 	

@@ -20,6 +20,7 @@ public class game_logic : MonoBehaviour {
 	public Text FinishScore;
 	public Text HighScore;
 	public Image TransitionImage;
+	public Text scoreFlyer;
 
 
 	private string highscoreKey = "highscore";
@@ -110,18 +111,21 @@ public class game_logic : MonoBehaviour {
 	public void ButtonClicked(Button btn){
 		if (btn.GetComponentInChildren<Text> ().text == CurrentQuestion.correct) {
 			TimerSlider.fillAmount += 0.02f;
-			RightText.GetComponent<Text> ().enabled = true;
-			WrongText.GetComponent<Text> ().enabled = false;
+//			RightText.GetComponent<Text> ().enabled = true;
+//			WrongText.GetComponent<Text> ().enabled = false;
 			StartTimer = true;
 
-			ScoreKeep.answerCorrect ();
+			float gotScore = ScoreKeep.answerCorrect ();
+			scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly");
+			btn.GetComponent<Animator> ().SetTrigger ("altBtnCorrect");
 
 		} else {
-			RightText.GetComponent<Text> ().enabled = false;
-			WrongText.GetComponent<Text> ().enabled = true;
+//			RightText.GetComponent<Text> ().enabled = false;
+//			WrongText.GetComponent<Text> ().enabled = true;
 			StartTimer = true;
 			TimerSlider.fillAmount -= 0.06f;
 			ScoreKeep.answerWrong ();
+			btn.GetComponent<Animator> ().SetTrigger ("altBtnWrong");
 		}
 
 		//get new question

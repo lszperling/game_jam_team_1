@@ -19,13 +19,17 @@ public class game_logic : MonoBehaviour {
 	public GameObject GameOver;
 	public Text FinishScore;
 	public Text HighScore;
+	public Image TransitionImage;
 
-	string highscoreKey = "highscore";
 
+	private string highscoreKey = "highscore";
 	private const float TimeLimit = 0.5f;
 	private float UIUpdateTimer = TimeLimit;
 	private bool StartTimer = false;
 	//private bool Paused = false;
+
+	private int TransWidth;
+	private int TransHeight;
 
 	private Question CurrentQuestion;
 
@@ -45,30 +49,42 @@ public class game_logic : MonoBehaviour {
 		WrongText.GetComponent<Text> ().enabled = false;
 
 		loadQuestion ();	
+
+		TransWidth = 0;
+		TransHeight = 0;
 	}
 
 	void FixedUpdate(){
 		TimerSlider.fillAmount -= 0.1f/100;
 
-		ScoreHandler.GetComponent<Text> ().text = "SCORE: " + ScoreKeep.currentScore;
+		ScoreHandler.GetComponent<Text> ().text = "" + ScoreKeep.currentScore;
 
 		if (TimerSlider.GetComponent<Image>().fillAmount <= 0) {
 
-			//SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); 
-			PlayArea.SetActive(false);
-			GameOver.SetActive(true);
-			FinishScore.GetComponent<Text> ().text = "Your score: " + ScoreKeep.currentScore;
+
+			RectTransform TransRectTrans = TransitionImage.GetComponent<RectTransform> ();
+
+			if (TransRectTrans.sizeDelta.x >= 3400 && TransRectTrans.sizeDelta.x >= 3400) {
+				//SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); 
+				PlayArea.SetActive (false);
+				GameOver.SetActive (true);
+				FinishScore.GetComponent<Text> ().text = "" + ScoreKeep.currentScore;
 
 
-			int current_score = (int) ScoreKeep.currentScore;
+				int current_score = (int)ScoreKeep.currentScore;
 
-			int highscore = PlayerPrefs.GetInt (highscoreKey);
-			if (current_score > highscore) {
-				PlayerPrefs.SetInt (highscoreKey, current_score);
+				int highscore = PlayerPrefs.GetInt (highscoreKey);
+				if (current_score > highscore) {
+					PlayerPrefs.SetInt (highscoreKey, current_score);
+				}
+
+				highscore = PlayerPrefs.GetInt (highscoreKey);
+				HighScore.GetComponent<Text> ().text = "" + highscore.ToString ();
+			} else {
+				TransHeight += 100;
+				TransWidth += 100;
+				TransRectTrans.sizeDelta = new Vector2( TransWidth, TransHeight);
 			}
-
-			highscore = PlayerPrefs.GetInt (highscoreKey);
-			HighScore.GetComponent<Text> ().text = "High score: " + highscore.ToString();
 
 			//Text final_thing;
 			//final_thing = GameObject.Find("final_score") as Text;

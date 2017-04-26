@@ -10,6 +10,13 @@ public class MainMenuLogic : MonoBehaviour {
 	public Button StartGameButton;
 	public Button RulesButton;
 	public Text HighScore;
+	public Image TransImage;
+
+	private int highscore = 0;
+	private bool StartGameClicked = false;
+	private bool ShowRulesClicked =  false;
+	private int TransWidth;
+	private int TransHeight;
 
 
 	// Use this for initialization
@@ -20,31 +27,54 @@ public class MainMenuLogic : MonoBehaviour {
 
 		if (PlayerPrefs.HasKey ("highscore")) {
 			HighScore.GetComponent<Text> ().text = "High score: " + PlayerPrefs.GetInt ("highscore").ToString();
-			HighScore.gameObject.active = true;
+			HighScore.gameObject.SetActive(true);
 		}
 
+		//set the highscore text
+		highscore = PlayerPrefs.GetInt ("highscore");
+		HighScore.GetComponent<Text> ().text = ""+highscore;
 
-		//button2.onClick.AddListener(() => ButtonClicked(button2));
+		TransWidth = 0;
+		TransHeight = 0;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
+		if (StartGameClicked) {
+		
+			RectTransform TransRectTrans = TransImage.GetComponent<RectTransform> ();
+		
+			if (TransRectTrans.sizeDelta.x >= 3400 && TransRectTrans.sizeDelta.x >= 3400) {	
+				SceneManager.LoadScene ("Game", LoadSceneMode.Single); 			
+			} else {			
+				TransHeight += 100;
+				TransWidth += 100;
+				TransRectTrans.sizeDelta = new Vector2 (TransWidth, TransHeight);			
+			}		
+		} 
+		else if (ShowRulesClicked) {
 
+			RectTransform TransRectTrans = TransImage.GetComponent<RectTransform> ();
 
+			if (TransRectTrans.sizeDelta.x >= 3400 && TransRectTrans.sizeDelta.x >= 3400) {
+				SceneManager.LoadScene ("RulesMenu", LoadSceneMode.Single); 
+			} else {
+				TransHeight += 100;
+				TransWidth += 100;
+				TransRectTrans.sizeDelta = new Vector2 (TransWidth, TransHeight);
+			}		
+		}
 	}
 
 	private void StartGame(){
-	
-		SceneManager.LoadScene("Game", LoadSceneMode.Single); 
-
+		if (!ShowRulesClicked) {
+			StartGameClicked = true;
+		}
 	}
 	private void ShowRules(){
-
-		SceneManager.LoadScene("RulesMenu", LoadSceneMode.Single); 
-
+		if (!StartGameClicked) {
+			ShowRulesClicked = true;
+		}
 	}
-
-
-
 }

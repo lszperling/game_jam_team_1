@@ -43,13 +43,6 @@ public class ScoreKeeper : MonoBehaviour {
 
 		float score = maxScorePerQuestion - (answerTime * scorePenaltyPerSecond);
 
-		if(currentScore >= comboBreak2 ) {
-			score = score * comboMultiplier1;
-		}
-		else if (currentScore >= comboBreak1) {
-			score = score * comboMultiplier2;
-		}
-
 		score = score * currentMultiplier ();
 
 		currentScore += score;

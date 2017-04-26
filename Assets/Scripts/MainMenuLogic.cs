@@ -9,6 +9,7 @@ public class MainMenuLogic : MonoBehaviour {
 
 	public Button StartGameButton;
 	public Button RulesButton;
+	public Text HighScore;
 
 
 	// Use this for initialization
@@ -16,6 +17,12 @@ public class MainMenuLogic : MonoBehaviour {
 
 		StartGameButton.onClick.AddListener(() => StartGame());
 		RulesButton.onClick.AddListener(() => ShowRules());
+
+		if (PlayerPrefs.HasKey ("highscore")) {
+			HighScore.GetComponent<Text> ().text = "High score: " + PlayerPrefs.GetInt ("highscore").ToString();
+			HighScore.gameObject.active = true;
+		}
+
 
 		//button2.onClick.AddListener(() => ButtonClicked(button2));
 	}

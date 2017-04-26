@@ -18,6 +18,7 @@ public class game_logic : MonoBehaviour {
 	public GameObject PlayArea;
 	public GameObject GameOver;
 	public Text FinishScore;
+	public Text HighScore;
 
 
 	private const float TimeLimit = 0.5f;
@@ -56,6 +57,17 @@ public class game_logic : MonoBehaviour {
 			PlayArea.SetActive(false);
 			GameOver.SetActive(true);
 			FinishScore.GetComponent<Text> ().text = "Your score: " + ScoreKeep.currentScore;
+
+
+			int current_score = (int) ScoreKeep.currentScore;
+
+			int highscore = PlayerPrefs.GetInt ("Player Score");
+			if (ScoreKeep.currentScore < highscore) {
+				PlayerPrefs.SetInt ("Player Score", current_score);
+			}
+			highscore = PlayerPrefs.GetInt ("Player Score");
+			HighScore.GetComponent<Text> ().text = "High score: " + highscore;
+
 			//Text final_thing;
 			//final_thing = GameObject.Find("final_score") as Text;
 			//final_thing.text = Text "hello";

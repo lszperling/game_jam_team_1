@@ -41,8 +41,8 @@ public class ScoreKeeper : MonoBehaviour {
 
 	public float answerCorrect(float answerTime = 0){
 
-		float score = maxScorePerQuestion - (answerTime * scorePenaltyPerSecond);
-
+		//float score = maxScorePerQuestion - (answerTime * scorePenaltyPerSecond);
+		float score = maxScorePerQuestion;
 		score = score * currentMultiplier ();
 
 		currentScore += score;

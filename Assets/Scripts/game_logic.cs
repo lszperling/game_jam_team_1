@@ -9,7 +9,7 @@ public class game_logic : MonoBehaviour {
 
 	public Button button1;
 	public Button button2;
-	public Slider TimerSlider;
+	public Image TimerSlider;
 	public Text RightText;
 	public Text WrongText;
 	public Image QuestionImage;
@@ -47,11 +47,11 @@ public class game_logic : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
-		TimerSlider.value -= 0.1f;
+		TimerSlider.fillAmount -= 0.1f/100;
 
 		ScoreHandler.GetComponent<Text> ().text = "SCORE: " + ScoreKeep.currentScore;
 
-		if (TimerSlider.GetComponent<Slider>().value <= 0) {
+		if (TimerSlider.GetComponent<Image>().fillAmount <= 0) {
 
 			//SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); 
 			PlayArea.SetActive(false);
@@ -91,7 +91,7 @@ public class game_logic : MonoBehaviour {
 
 	public void ButtonClicked(Button btn){
 		if (btn.GetComponentInChildren<Text> ().text == CurrentQuestion.correct) {
-			TimerSlider.value += 2;
+			TimerSlider.fillAmount += 0.02f;
 			RightText.GetComponent<Text> ().enabled = true;
 			WrongText.GetComponent<Text> ().enabled = false;
 			StartTimer = true;
@@ -102,7 +102,7 @@ public class game_logic : MonoBehaviour {
 			RightText.GetComponent<Text> ().enabled = false;
 			WrongText.GetComponent<Text> ().enabled = true;
 			StartTimer = true;
-			TimerSlider.value -= 6;
+			TimerSlider.fillAmount -= 0.06f;
 			ScoreKeep.answerWrong ();
 		}
 

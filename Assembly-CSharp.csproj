@@ -62,10 +62,13 @@
      <Compile Include="Assets\Scripts\GameOverLogic.cs" />
      <Compile Include="Assets\Scripts\MainMenuLogic.cs" />
      <Compile Include="Assets\Scripts\ParticleEffect.cs" />
+     <Compile Include="Assets\Scripts\RulesMenuLogic.cs" />
      <Compile Include="Assets\Scripts\ScoreKeeper.cs" />
      <Compile Include="Assets\Scripts\content.cs" />
      <Compile Include="Assets\Scripts\game_logic.cs" />
      <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
+     <None Include="Assets\Resources\Fonts\LICENSE.txt" />
+     <None Include="Assets\Resources\Fonts\OFL.txt" />
      <None Include="Assets\FacebookSDK\link.xml" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

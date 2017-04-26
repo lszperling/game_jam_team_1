@@ -21,7 +21,8 @@ public class game_logic : MonoBehaviour {
 	public Text HighScore;
 	public Image TransitionImage;
 	public Text scoreFlyer;
-
+	public Text titleLevel;
+	public Text levelUpFlyer;
 
 	private string highscoreKey = "highscore";
 	private const float TimeLimit = 0.5f;
@@ -36,10 +37,14 @@ public class game_logic : MonoBehaviour {
 
 	private ScoreKeeper ScoreKeep;
 
+	private string currentTitle;
+
 	// Use this for initialization
 	void Start () {
 		CurrentQuestion = GetComponent<content> ().getQuestion();
 		ScoreKeep = GetComponent<ScoreKeeper> ();
+		currentTitle = ScoreKeep.currentTitle ();
+		titleLevel.GetComponent<Text> ().text = currentTitle;
 
 		//listeners for buttons
 		button1.onClick.AddListener(() => ButtonClicked(button1));
@@ -81,6 +86,7 @@ public class game_logic : MonoBehaviour {
 
 				highscore = PlayerPrefs.GetInt (highscoreKey);
 				HighScore.GetComponent<Text> ().text = "" + highscore.ToString ();
+
 			} else {
 				TransHeight += 100;
 				TransWidth += 100;
@@ -116,8 +122,20 @@ public class game_logic : MonoBehaviour {
 			StartTimer = true;
 
 			float gotScore = ScoreKeep.answerCorrect ();
-			scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly");
+//			scoreFlyer.GetComponent<Text> ().text = "+" + gotScore;
+//			scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly");
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnCorrect");
+
+
+			Debug.Log ("CURRENT TITLE:" + ScoreKeep.currentTitle());
+			if (ScoreKeep.currentTitle () != currentTitle) {
+				//Level up!
+				Debug.Log("LEVEL UP");
+				currentTitle = ScoreKeep.currentTitle ();
+				titleLevel.GetComponent<Text> ().text = currentTitle;
+				levelUpFlyer.GetComponent<Text> ().text = currentTitle;
+				levelUpFlyer.GetComponent<Animator> ().SetTrigger ("show");
+			}
 
 		} else {
 //			RightText.GetComponent<Text> ().enabled = false;
@@ -152,4 +170,7 @@ public class game_logic : MonoBehaviour {
 		Sprite temp = Resources.Load<Sprite>("Images/"+CurrentQuestion.imgID);
 		QuestionImage.GetComponent<Image> ().sprite = temp;
 	}
+
+
+
 }

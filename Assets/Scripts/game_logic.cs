@@ -128,6 +128,8 @@ public class game_logic : MonoBehaviour {
 			StartTimer = true;
 
 			float gotScore = ScoreKeep.answerCorrect ();
+			scoreFlyer.GetComponent<Text> ().text = "+" + gotScore;
+			scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly");
 
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnCorrect");
 

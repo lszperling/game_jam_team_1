@@ -14,7 +14,6 @@ public class ScoreKeeper : MonoBehaviour {
 	public int comboBreak2 = 6;
 	public float comboMultiplier2 = 3f;
 
-	//public List<string> titles = ['Тугодум', 'Тормоз', 'Слоупок', 'Черепаха',  'Живчик', 'Пострел', 'Ветер', 'Молния', 'Пуля', 'Шустряк'];
 	public List<string> titles;
 
 	public List<float> titleScoreLevels;
@@ -49,9 +48,7 @@ public class ScoreKeeper : MonoBehaviour {
 		float score = maxScorePerQuestion - (answerTime * scorePenaltyPerSecond);
 
 		score = score * currentMultiplier ();
-
-
-
+	
 		currentScore += score;
 		currentStreak += 1;
 

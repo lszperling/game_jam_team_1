@@ -25,13 +25,16 @@ public class game_logic : MonoBehaviour {
 	public Text titleLevel;
 	public Text levelUpFlyer;
 	public Text timeUpFlyer;
+	public Button rateButton;
 	public AudioSource MusicSource;
+
 
 	private string highscoreKey = "highscore";
 	private const float TimeLimit = 0.5f;
 	private float UIUpdateTimer = TimeLimit;
 	private bool StartTimer = false;
 	//private bool Paused = false;
+	private float currentMultiplier = 1;
 
 	private int TransWidth;
 	private int TransHeight;
@@ -53,6 +56,7 @@ public class game_logic : MonoBehaviour {
 		button1.onClick.AddListener(() => ButtonClicked(button1));
 		button2.onClick.AddListener(() => ButtonClicked(button2));
 
+		rateButton.onClick.AddListener(() => LeaveRating());
 		//Remove right wrong text
 		RightText.GetComponent<Text> ().enabled = false;
 		WrongText.GetComponent<Text> ().enabled = false;
@@ -75,7 +79,9 @@ public class game_logic : MonoBehaviour {
 			float minusTime = (-0.1f * (0f + (ScoreKeep.currentLevel ()))) / 100;
 			changeTimersFillValues (minusTime);
 
-			if (TimerSlider.fillAmount < 0.2f) {
+			currentMultiplier = ScoreKeep.currentMultiplier ();
+
+			if (TimerSlider.fillAmount < 0.4f) {
 				TimerSlider.GetComponent<Animator> ().SetTrigger ("pulsate");
 			} else {
 				TimerSlider.GetComponent<Animator> ().SetTrigger ("default");
@@ -142,21 +148,43 @@ public class game_logic : MonoBehaviour {
 		btn.GetComponent<AudioSource> ().Play ();
 
 		if (btn.GetComponentInChildren<Text> ().text == CurrentQuestion.correct) {
+<<<<<<< Updated upstream
 			changeTimersFillValues (0.02f * (1 + ScoreKeep.currentMultiplier()) / 2);
 			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseGreen");
+=======
+			changeTimersFillValues (0.02f);
+
+			Debug.Log ("CurrentMultipler" + currentMultiplier);
+			Debug.Log ("scoreKeep.currentMultiplier" + ScoreKeep.currentMultiplier());
+
+
+
+
+
+>>>>>>> Stashed changes
 
 			timeUpFlyer.transform.position = positionForTimeUpFlyer ();
-		
+
 			StartTimer = true;
 
 			float gotScore = ScoreKeep.answerCorrect ();
+			ScoreHandler.GetComponent<Animator> ().SetTrigger ("bounce");
 			scoreFlyer.GetComponent<Text> ().text = "+" + gotScore;
 			scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly");
 
+			btn.GetComponent<Animator> ().SetTrigger ("default");
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnCorrect");
 
+			if (currentMultiplier != ScoreKeep.currentMultiplier ()) {
+				//STREEAK!
+				Debug.Log ("STREAAAK");
+				TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("streakMode");
+			} else {
+				TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseGreen");
+			}
 
-			//Debug.Log ("CURRENT TITLE:" + ScoreKeep.currentTitle());
+			currentMultiplier = ScoreKeep.currentMultiplier ();
+
 			if (ScoreKeep.currentTitle () != currentTitle) {
 				//Level up!
 				setTimersFillValues(1);
@@ -166,11 +194,18 @@ public class game_logic : MonoBehaviour {
 				levelUpFlyer.GetComponent<Animator> ().SetTrigger ("show");
 			}
 
+
+
+
 		} else {
 			StartTimer = true;
 			changeTimersFillValues (-0.06f);
+			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("default");
 			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseRed");
 			ScoreKeep.answerWrong ();
+
+
+			btn.GetComponent<Animator> ().SetTrigger ("default");
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnWrong");
 		}
 
@@ -194,14 +229,19 @@ public class game_logic : MonoBehaviour {
 
 	private void loadQuestion() {
 		int randomIndex = Random.Range (1, 3);
+<<<<<<< Updated upstream
 
 		//button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
 		//button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
 
+=======
+	
+>>>>>>> Stashed changes
 		if (randomIndex == 1) {
 			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
 			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
 		}
+<<<<<<< Updated upstream
 		else if (randomIndex == 2) {
 			button2.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
 			button1.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
@@ -210,6 +250,13 @@ public class game_logic : MonoBehaviour {
 			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
 			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
 		}
+=======
+		else {
+			button2.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+			button1.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+		}
+
+>>>>>>> Stashed changes
 		Sprite temp = Resources.Load<Sprite>("Images/"+CurrentQuestion.imgID);
 		QuestionImage.GetComponent<Image> ().sprite = temp;
 	}
@@ -222,6 +269,10 @@ public class game_logic : MonoBehaviour {
 	private void setTimersFillValues(float value){
 		TimerSlider.fillAmount = value;
 		TimerAddTimeOverlay.fillAmount = value;
+	}
+		
+	private void LeaveRating(){
+		Application.OpenURL("https://play.google.com/store/apps/details?id=com.BlipBlop.Tugodumka");
 	}
 
 }

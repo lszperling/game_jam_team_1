@@ -10,6 +10,7 @@ public class game_logic : MonoBehaviour {
 	public Button button1;
 	public Button button2;
 	public Image TimerSlider;
+	public Image TimerAddTimeOverlay;
 	public Text RightText;
 	public Text WrongText;
 	public Image QuestionImage;
@@ -23,6 +24,7 @@ public class game_logic : MonoBehaviour {
 	public Text scoreFlyer;
 	public Text titleLevel;
 	public Text levelUpFlyer;
+	public Text timeUpFlyer;
 
 	private string highscoreKey = "highscore";
 	private const float TimeLimit = 0.5f;
@@ -58,11 +60,19 @@ public class game_logic : MonoBehaviour {
 
 		TransWidth = 0;
 		TransHeight = 0;
+
 	}
 
 	void FixedUpdate(){
-		TimerSlider.fillAmount -= 0.1f/100;
+		float minusTime = -0.1f/100;
+		changeTimersFillValues (minusTime);
 
+		if (TimerSlider.fillAmount < 0.2f) {
+			TimerSlider.GetComponent<Animator> ().SetTrigger ("pulsate");
+		} else {
+			TimerSlider.GetComponent<Animator> ().SetTrigger ("default");
+		}
+	
 		ScoreHandler.GetComponent<Text> ().text = "" + ScoreKeep.currentScore;
 
 		if (TimerSlider.GetComponent<Image>().fillAmount <= 0) {
@@ -116,32 +126,35 @@ public class game_logic : MonoBehaviour {
 
 	public void ButtonClicked(Button btn){
 		if (btn.GetComponentInChildren<Text> ().text == CurrentQuestion.correct) {
-			TimerSlider.fillAmount += 0.02f;
-//			RightText.GetComponent<Text> ().enabled = true;
-//			WrongText.GetComponent<Text> ().enabled = false;
+
+			changeTimersFillValues (0.02f);
+			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseGreen");
+
+			timeUpFlyer.transform.position = positionForTimeUpFlyer ();
+		
 			StartTimer = true;
 
 			float gotScore = ScoreKeep.answerCorrect ();
-//			scoreFlyer.GetComponent<Text> ().text = "+" + gotScore;
-//			scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly");
+			scoreFlyer.GetComponent<Text> ().text = "+" + gotScore;
+			scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly");
+
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnCorrect");
 
 
 			Debug.Log ("CURRENT TITLE:" + ScoreKeep.currentTitle());
 			if (ScoreKeep.currentTitle () != currentTitle) {
 				//Level up!
-				Debug.Log("LEVEL UP");
+
 				currentTitle = ScoreKeep.currentTitle ();
 				titleLevel.GetComponent<Text> ().text = currentTitle;
-				levelUpFlyer.GetComponent<Text> ().text = currentTitle;
+				levelUpFlyer.GetComponent<Text> ().text = "Level up!";
 				levelUpFlyer.GetComponent<Animator> ().SetTrigger ("show");
 			}
 
 		} else {
-//			RightText.GetComponent<Text> ().enabled = false;
-//			WrongText.GetComponent<Text> ().enabled = true;
 			StartTimer = true;
-			TimerSlider.fillAmount -= 0.06f;
+			changeTimersFillValues (-0.06f);
+			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseRed");
 			ScoreKeep.answerWrong ();
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnWrong");
 		}
@@ -152,25 +165,49 @@ public class game_logic : MonoBehaviour {
 
 	}
 
+
+	private Vector2 positionForTimeUpFlyer(){
+
+
+		float angleDegrees = (360 * TimerSlider.fillAmount) + 90;
+		Debug.Log ("Degrees:" + angleDegrees);
+
+		float radians = angleDegrees * Mathf.Deg2Rad;
+
+		var x = Mathf.Cos(radians);
+		var y = Mathf.Sin(radians);
+		Vector2 center = TimerSlider.transform.position;
+		Vector2 position = center + new Vector2 (x, y);
+		return position * 3;
+
+
+	}
+
 	private void loadQuestion() {
 		int randomIndex = Random.Range (1, 3);
 
-		if (randomIndex == 1) {
-			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
-			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
-		}
-		else if (randomIndex == 2) {
-			button2.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
-			button1.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
-		}
-		else{
-			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
-			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
-		}
+		button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+		button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+
+//		if (randomIndex == 1) {
+//			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+//			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+//		}
+//		else if (randomIndex == 2) {
+//			button2.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+//			button1.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+//		}
+//		else{
+//			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+//			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+//		}
 		Sprite temp = Resources.Load<Sprite>("Images/"+CurrentQuestion.imgID);
 		QuestionImage.GetComponent<Image> ().sprite = temp;
 	}
 
-
+	private void changeTimersFillValues(float deltaValue) {
+		TimerSlider.fillAmount += deltaValue;
+		TimerAddTimeOverlay.fillAmount += deltaValue;
+	}
 
 }

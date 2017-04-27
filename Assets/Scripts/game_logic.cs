@@ -69,7 +69,10 @@ public class game_logic : MonoBehaviour {
 		ScoreHandler.GetComponent<Text> ().text = "" + ScoreKeep.currentScore;
 
 		if (PlayArea.activeSelf) {
-			float minusTime = (-0.1f*(0f+(ScoreKeep.currentLevel()))) / 100;
+			if (!MusicSource.isPlaying){
+				MusicSource.Play ();
+			}
+			float minusTime = (-0.1f * (0f + (ScoreKeep.currentLevel ()))) / 100;
 			changeTimersFillValues (minusTime);
 
 			if (TimerSlider.fillAmount < 0.2f) {
@@ -84,12 +87,14 @@ public class game_logic : MonoBehaviour {
 
 			if (TimerSlider.GetComponent<Image> ().fillAmount <= 0) {
 
+				MusicSource.Stop ();
 				RectTransform TransRectTrans = TransitionImage.GetComponent<RectTransform> ();
 
 				if (TransRectTrans.sizeDelta.x >= 3400 && TransRectTrans.sizeDelta.x >= 3400) {
 					//SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); 
 					PlayArea.SetActive (false);
 					GameOver.SetActive (true);
+
 					FinishScore.GetComponent<Text> ().text = "" + ScoreKeep.currentScore;
 
 
@@ -113,6 +118,8 @@ public class game_logic : MonoBehaviour {
 				//final_thing = GameObject.Find("final_score") as Text;
 				//final_thing.text = Text "hello";
 			}
+		} else {
+			MusicSource.Stop ();
 		}
 	}
 	
@@ -132,8 +139,9 @@ public class game_logic : MonoBehaviour {
 	}
 
 	public void ButtonClicked(Button btn){
-		if (btn.GetComponentInChildren<Text> ().text == CurrentQuestion.correct) {
+		btn.GetComponent<AudioSource> ().Play ();
 
+		if (btn.GetComponentInChildren<Text> ().text == CurrentQuestion.correct) {
 			changeTimersFillValues (0.02f);
 			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseGreen");
 

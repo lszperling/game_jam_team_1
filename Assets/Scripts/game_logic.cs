@@ -25,6 +25,7 @@ public class game_logic : MonoBehaviour {
 	public Text titleLevel;
 	public Text levelUpFlyer;
 	public Text timeUpFlyer;
+	public AudioSource MusicSource;
 
 	private string highscoreKey = "highscore";
 	private const float TimeLimit = 0.5f;
@@ -64,62 +65,68 @@ public class game_logic : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
-		float minusTime = -0.1f/100;
-		changeTimersFillValues (minusTime);
 
-		if (TimerSlider.fillAmount < 0.2f) {
-			TimerSlider.GetComponent<Animator> ().SetTrigger ("pulsate");
-		} else {
-			TimerSlider.GetComponent<Animator> ().SetTrigger ("default");
-		}
-	
 		ScoreHandler.GetComponent<Text> ().text = "" + ScoreKeep.currentScore;
 
-		if (TimerSlider.GetComponent<Image>().fillAmount <= 0) {
+		if (PlayArea.activeSelf) {
+			float minusTime = (-0.1f*(0f+(ScoreKeep.currentLevel()))) / 100;
+			changeTimersFillValues (minusTime);
 
-
-			RectTransform TransRectTrans = TransitionImage.GetComponent<RectTransform> ();
-
-			if (TransRectTrans.sizeDelta.x >= 3400 && TransRectTrans.sizeDelta.x >= 3400) {
-				//SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); 
-				PlayArea.SetActive (false);
-				GameOver.SetActive (true);
-				FinishScore.GetComponent<Text> ().text = "" + ScoreKeep.currentScore;
-
-
-				int current_score = (int)ScoreKeep.currentScore;
-
-				int highscore = PlayerPrefs.GetInt (highscoreKey);
-				if (current_score > highscore) {
-					PlayerPrefs.SetInt (highscoreKey, current_score);
-				}
-
-				highscore = PlayerPrefs.GetInt (highscoreKey);
-				HighScore.GetComponent<Text> ().text = "" + highscore.ToString ();
-
+			if (TimerSlider.fillAmount < 0.2f) {
+				TimerSlider.GetComponent<Animator> ().SetTrigger ("pulsate");
 			} else {
-				TransHeight += 100;
-				TransWidth += 100;
-				TransRectTrans.sizeDelta = new Vector2( TransWidth, TransHeight);
+				TimerSlider.GetComponent<Animator> ().SetTrigger ("default");
 			}
 
-			//Text final_thing;
-			//final_thing = GameObject.Find("final_score") as Text;
-			//final_thing.text = Text "hello";
+			//Set pitch of music
+			float currentLevel = -1f + (float)ScoreKeep.currentLevel ();
+			MusicSource.GetComponent<AudioSource> ().pitch = 1f + (currentLevel / 10);
+
+			if (TimerSlider.GetComponent<Image> ().fillAmount <= 0) {
+
+				RectTransform TransRectTrans = TransitionImage.GetComponent<RectTransform> ();
+
+				if (TransRectTrans.sizeDelta.x >= 3400 && TransRectTrans.sizeDelta.x >= 3400) {
+					//SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); 
+					PlayArea.SetActive (false);
+					GameOver.SetActive (true);
+					FinishScore.GetComponent<Text> ().text = "" + ScoreKeep.currentScore;
+
+
+					int current_score = (int)ScoreKeep.currentScore;
+
+					int highscore = PlayerPrefs.GetInt (highscoreKey);
+					if (current_score > highscore) {
+						PlayerPrefs.SetInt (highscoreKey, current_score);
+					}
+
+					highscore = PlayerPrefs.GetInt (highscoreKey);
+					HighScore.GetComponent<Text> ().text = "" + highscore.ToString ();
+
+				} else {
+					TransHeight += 100;
+					TransWidth += 100;
+					TransRectTrans.sizeDelta = new Vector2 (TransWidth, TransHeight);
+				}
+
+				//Text final_thing;
+				//final_thing = GameObject.Find("final_score") as Text;
+				//final_thing.text = Text "hello";
+			}
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {	
-
-		if(StartTimer){
-			UIUpdateTimer -= Time.deltaTime;
-			if ( UIUpdateTimer < 0 )
-			{
-				RightText.GetComponent<Text> ().enabled = false;
-				WrongText.GetComponent<Text> ().enabled = false;
-				UIUpdateTimer = TimeLimit;
-				StartTimer = false;
+		if (PlayArea.activeSelf) {
+			if (StartTimer) {
+				UIUpdateTimer -= Time.deltaTime;
+				if (UIUpdateTimer < 0) {
+					RightText.GetComponent<Text> ().enabled = false;
+					WrongText.GetComponent<Text> ().enabled = false;
+					UIUpdateTimer = TimeLimit;
+					StartTimer = false;
+				}
 			}
 		}
 	}
@@ -141,10 +148,10 @@ public class game_logic : MonoBehaviour {
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnCorrect");
 
 
-			Debug.Log ("CURRENT TITLE:" + ScoreKeep.currentTitle());
+			//Debug.Log ("CURRENT TITLE:" + ScoreKeep.currentTitle());
 			if (ScoreKeep.currentTitle () != currentTitle) {
 				//Level up!
-
+				setTimersFillValues(1);
 				currentTitle = ScoreKeep.currentTitle ();
 				titleLevel.GetComponent<Text> ().text = currentTitle;
 				levelUpFlyer.GetComponent<Text> ().text = "Level up!";
@@ -162,15 +169,12 @@ public class game_logic : MonoBehaviour {
 		//get new question
 		CurrentQuestion = GetComponent<content> ().getQuestion();
 		loadQuestion ();
-
 	}
-
 
 	private Vector2 positionForTimeUpFlyer(){
 
-
 		float angleDegrees = (360 * TimerSlider.fillAmount) + 90;
-		Debug.Log ("Degrees:" + angleDegrees);
+		//Debug.Log ("Degrees:" + angleDegrees);
 
 		float radians = angleDegrees * Mathf.Deg2Rad;
 
@@ -181,7 +185,7 @@ public class game_logic : MonoBehaviour {
 	}
 
 	private void loadQuestion() {
-		int randomIndex = Random.Range (1, 3);
+		//int randomIndex = Random.Range (1, 3);
 
 		button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
 		button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
@@ -205,6 +209,11 @@ public class game_logic : MonoBehaviour {
 	private void changeTimersFillValues(float deltaValue) {
 		TimerSlider.fillAmount += deltaValue;
 		TimerAddTimeOverlay.fillAmount += deltaValue;
+	}
+
+	private void setTimersFillValues(float value){
+		TimerSlider.fillAmount = value;
+		TimerAddTimeOverlay.fillAmount = value;
 	}
 
 }

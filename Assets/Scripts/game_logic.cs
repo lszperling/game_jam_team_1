@@ -60,12 +60,19 @@ public class game_logic : MonoBehaviour {
 
 		TransWidth = 0;
 		TransHeight = 0;
+
 	}
 
 	void FixedUpdate(){
 		float minusTime = -0.1f/100;
 		changeTimersFillValues (minusTime);
 
+		if (TimerSlider.fillAmount < 0.2f) {
+			TimerSlider.GetComponent<Animator> ().SetTrigger ("pulsate");
+		} else {
+			TimerSlider.GetComponent<Animator> ().SetTrigger ("default");
+		}
+	
 		ScoreHandler.GetComponent<Text> ().text = "" + ScoreKeep.currentScore;
 
 		if (TimerSlider.GetComponent<Image>().fillAmount <= 0) {
@@ -137,10 +144,10 @@ public class game_logic : MonoBehaviour {
 			Debug.Log ("CURRENT TITLE:" + ScoreKeep.currentTitle());
 			if (ScoreKeep.currentTitle () != currentTitle) {
 				//Level up!
-				Debug.Log("LEVEL UP");
+
 				currentTitle = ScoreKeep.currentTitle ();
 				titleLevel.GetComponent<Text> ().text = currentTitle;
-				levelUpFlyer.GetComponent<Text> ().text = currentTitle;
+				levelUpFlyer.GetComponent<Text> ().text = "Level up!";
 				levelUpFlyer.GetComponent<Animator> ().SetTrigger ("show");
 			}
 

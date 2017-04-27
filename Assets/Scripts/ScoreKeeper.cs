@@ -14,6 +14,9 @@ public class ScoreKeeper : MonoBehaviour {
 	public int comboBreak2 = 6;
 	public float comboMultiplier2 = 3f;
 
+	public int comboBreak3 = 10;
+	public float comboMultiplier3 = 5f;
+
 	public List<string> titles;
 
 	public List<float> titleScoreLevels;
@@ -38,6 +41,11 @@ public class ScoreKeeper : MonoBehaviour {
 		if (currentStreak >= comboBreak2) {
 
 			comboMultiplier = comboMultiplier2;
+		}
+
+		if (currentStreak >= comboBreak3) {
+
+			comboMultiplier = comboMultiplier3;
 		}
 
 		return comboMultiplier;

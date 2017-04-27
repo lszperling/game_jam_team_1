@@ -142,7 +142,7 @@ public class game_logic : MonoBehaviour {
 		btn.GetComponent<AudioSource> ().Play ();
 
 		if (btn.GetComponentInChildren<Text> ().text == CurrentQuestion.correct) {
-			changeTimersFillValues (0.02f);
+			changeTimersFillValues (0.02f * (1 + ScoreKeep.currentMultiplier()) / 2);
 			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseGreen");
 
 			timeUpFlyer.transform.position = positionForTimeUpFlyer ();
@@ -193,23 +193,23 @@ public class game_logic : MonoBehaviour {
 	}
 
 	private void loadQuestion() {
-		//int randomIndex = Random.Range (1, 3);
+		int randomIndex = Random.Range (1, 3);
 
-		button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
-		button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+		//button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+		//button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
 
-//		if (randomIndex == 1) {
-//			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
-//			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
-//		}
-//		else if (randomIndex == 2) {
-//			button2.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
-//			button1.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
-//		}
-//		else{
-//			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
-//			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
-//		}
+		if (randomIndex == 1) {
+			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+		}
+		else if (randomIndex == 2) {
+			button2.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+			button1.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+		}
+		else{
+			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+		}
 		Sprite temp = Resources.Load<Sprite>("Images/"+CurrentQuestion.imgID);
 		QuestionImage.GetComponent<Image> ().sprite = temp;
 	}

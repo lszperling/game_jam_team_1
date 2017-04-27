@@ -48,7 +48,7 @@ public class ScoreKeeper : MonoBehaviour {
 		float score = maxScorePerQuestion - (answerTime * scorePenaltyPerSecond);
 
 		score = score * currentMultiplier ();
-	
+		
 		currentScore += score;
 		currentStreak += 1;
 
@@ -58,9 +58,7 @@ public class ScoreKeeper : MonoBehaviour {
 	public void answerWrong(){
 		currentStreak = 0;
 	}
-
-
-
+		
 	public string currentTitle(){
 		int i = 0;
 		string title = "";
@@ -72,6 +70,21 @@ public class ScoreKeeper : MonoBehaviour {
 		}
 		return title;
 	}
+
+	public int currentLevel(){
+		int i = 0;
+		foreach(float scoreLevel in titleScoreLevels) {
+			if (currentScore >= scoreLevel) {
+				i = i + 1;
+			} else {
+				break;
+			}
+
+		}
+		return i;
+	}
+
+
 
 	// Update is called once per frame
 	void Update () {

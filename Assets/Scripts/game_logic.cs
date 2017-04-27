@@ -176,11 +176,8 @@ public class game_logic : MonoBehaviour {
 
 		var x = Mathf.Cos(radians);
 		var y = Mathf.Sin(radians);
-		Vector2 center = TimerSlider.transform.position;
-		Vector2 position = center + new Vector2 (x, y);
+		Vector2 position = new Vector2 (x, y -5);
 		return position * 3;
-
-
 	}
 
 	private void loadQuestion() {

@@ -255,19 +255,27 @@ public class game_logic : MonoBehaviour {
 		}
 
 
-		Sprite temp = Resources.Load<Sprite>("Images/"+CurrentQuestion.imgID);
-		if (PlayerPrefs.GetInt ("selectedTopic") == 2) {
-			temp = Resources.Load<Sprite>("Images_animals/"+CurrentQuestion.imgID);
-		} 
-		if (PlayerPrefs.GetInt ("selectedTopic") == 3) {
-			temp = Resources.Load<Sprite>("Images_geo/"+CurrentQuestion.imgID);
-		} 
-		if (PlayerPrefs.GetInt ("selectedTopic") == 4) {
-			temp = Resources.Load<Sprite>("Images_sweetshop/"+CurrentQuestion.imgID);
-		} 
-		if (PlayerPrefs.GetInt ("selectedTopic") == 5) {
-			temp = Resources.Load<Sprite>("Images_random/"+CurrentQuestion.imgID);
-		} 
+		string imagePath = "Images_animals/" + CurrentQuestion.imgID;
+
+		switch (PlayerPrefs.GetInt ("selectedTopic")) {
+		case 1:
+			imagePath = "Images_sweetshop/" + CurrentQuestion.imgID;
+			break;
+		case 2:
+			imagePath = "Images_geo/" + CurrentQuestion.imgID;
+			break;
+		case 3:
+			imagePath = "Images_animals/" + CurrentQuestion.imgID;
+			break;
+		case 4:
+			imagePath = "Images/" + CurrentQuestion.imgID;
+			break;
+		case 5:
+			imagePath = "Images_random/" + CurrentQuestion.imgID;
+			break;
+		}
+
+		Sprite temp = Resources.Load<Sprite>(imagePath);
 		QuestionImage.GetComponent<Image> ().sprite = temp;
 	}
 

@@ -204,11 +204,17 @@ public class MainMenuLogic : MonoBehaviour {
 	}
 
 	private String CountdownString(TimeSpan timeDifference){
-		return timeDifference.Hours + ":" + 
-			timeDifference.Minutes + ":" + timeDifference.Seconds;;
+		return MakeDoubleDigit(timeDifference.Hours) + ":" + 
+			MakeDoubleDigit(timeDifference.Minutes) + ":" + 
+			MakeDoubleDigit(timeDifference.Seconds);
 	}
 
-
+	private String MakeDoubleDigit(int number){
+		if (number < 10) {
+			return "0" + number;
+		}
+		return number.ToString ();
+	}
 
 	private TimeSpan GetTimeFromFinalDate(){
 		DateTime installDate = Convert.ToDateTime (PlayerPrefs.GetString (installDateKey).ToString ());

@@ -33,8 +33,17 @@ public class content : MonoBehaviour {
 
 		if (PlayerPrefs.GetInt ("selectedTopic") == 2) {
 			asset = Resources.Load (Path.Combine ("Questions", "questions_animals")) as TextAsset;
-
 		} 
+		if (PlayerPrefs.GetInt ("selectedTopic") == 3) {
+			asset = Resources.Load (Path.Combine ("Questions", "questions_geo")) as TextAsset;
+		} 
+		if (PlayerPrefs.GetInt ("selectedTopic") == 4) {
+			asset = Resources.Load (Path.Combine ("Questions", "questions_sweetshop")) as TextAsset;
+		} 
+		if (PlayerPrefs.GetInt ("selectedTopic") == 5) {
+			asset = Resources.Load (Path.Combine ("Questions", "questions_random")) as TextAsset;
+		} 
+
 
 		questionList = JsonUtility.FromJson<QuestionList> (asset.text);
 	}

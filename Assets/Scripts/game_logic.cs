@@ -246,7 +246,15 @@ public class game_logic : MonoBehaviour {
 		Sprite temp = Resources.Load<Sprite>("Images/"+CurrentQuestion.imgID);
 		if (PlayerPrefs.GetInt ("selectedTopic") == 2) {
 			temp = Resources.Load<Sprite>("Images_animals/"+CurrentQuestion.imgID);
-
+		} 
+		if (PlayerPrefs.GetInt ("selectedTopic") == 3) {
+			temp = Resources.Load<Sprite>("Images_geo/"+CurrentQuestion.imgID);
+		} 
+		if (PlayerPrefs.GetInt ("selectedTopic") == 4) {
+			temp = Resources.Load<Sprite>("Images_sweetshop/"+CurrentQuestion.imgID);
+		} 
+		if (PlayerPrefs.GetInt ("selectedTopic") == 5) {
+			temp = Resources.Load<Sprite>("Images_random/"+CurrentQuestion.imgID);
 		} 
 		QuestionImage.GetComponent<Image> ().sprite = temp;
 	}

@@ -70,7 +70,7 @@ public class game_logic : MonoBehaviour {
 		TransWidth = 0;
 		TransHeight = 0;
 
-		levelUpFlyer.GetComponent<Text>().text = "Score Multiplier: " + ScoreKeep.currentMultiplier () + "x";
+		levelUpFlyer.GetComponent<Text>().text = "Очки: " + ScoreKeep.currentMultiplier () + "x";
 
 	}
 
@@ -184,7 +184,7 @@ public class game_logic : MonoBehaviour {
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnCorrect");
 
 			if (ScoreKeep.currentMultiplier () > currentMultiplier) {
-				levelUpFlyer.GetComponent<Text>().text = "Score Multiplier: " + ScoreKeep.currentMultiplier () + "x";
+				levelUpFlyer.GetComponent<Text>().text = "Очки: " + ScoreKeep.currentMultiplier () + "x";
 				levelUpFlyer.GetComponent<Animator> ().SetTrigger ("streakon");
 
 				currentStreakLevel += 1;
@@ -220,7 +220,7 @@ public class game_logic : MonoBehaviour {
 			btn.GetComponent<Animator> ().SetTrigger ("default");
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnWrong");
 
-			levelUpFlyer.GetComponent<Text>().text = "Score Multiplier: " + ScoreKeep.currentMultiplier () + "x";
+			levelUpFlyer.GetComponent<Text>().text = "Очки: " + ScoreKeep.currentMultiplier () + "x";
 		}
 
 		//get new question

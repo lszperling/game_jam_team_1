@@ -52,8 +52,10 @@ public class game_logic : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
 		CurrentQuestion = GetComponent<content> ().getQuestion();
 		ScoreKeep = GetComponent<ScoreKeeper> ();
+
 		currentTitle = ScoreKeep.currentTitle ();
 		titleLevel.GetComponent<Text> ().text = currentTitle;
 
@@ -200,7 +202,14 @@ public class game_logic : MonoBehaviour {
 
 			if (ScoreKeep.currentTitle () != currentTitle) {
 				//Level up!
+
+				// This will be a new level so reset isstreaking.
+				streakMode(false, 1);
+				TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("defaultColor");
+				TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("default");
+
 				setTimersFillValues(1);
+
 				currentTitle = ScoreKeep.currentTitle ();
 				titleLevel.GetComponent<Text> ().text = currentTitle;
 			}
@@ -305,6 +314,9 @@ public class game_logic : MonoBehaviour {
 			//starsParticleSystem.emission.SetBursts (1000);
 			starsParticleSystem.Play ();	
 		} else {
+			Color temp = TimerAddTimeOverlay.color;
+			temp.a=0f;
+			TimerAddTimeOverlay.color = temp;
 			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("default");
 			starsParticleSystem.Stop ();
 		}

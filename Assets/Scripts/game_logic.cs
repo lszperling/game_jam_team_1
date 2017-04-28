@@ -70,16 +70,19 @@ public class game_logic : MonoBehaviour {
 		TransWidth = 0;
 		TransHeight = 0;
 
+		levelUpFlyer.GetComponent<Text>().text = "Score Multiplier: " + ScoreKeep.currentMultiplier () + "x";
+
 	}
 
 	void FixedUpdate(){
 
+	
 		ScoreHandler.GetComponent<Text> ().text = "" + ScoreKeep.currentScore;
 
 		if (isStreaking && !starsParticleSystem.isPlaying) {
 			starsParticleSystem.Play ();
 		}
-
+			
 		if (PlayArea.activeSelf) {
 			if (!MusicSource.isPlaying){
 				MusicSource.Play ();
@@ -166,15 +169,24 @@ public class game_logic : MonoBehaviour {
 			float gotScore = ScoreKeep.answerCorrect ();
 			ScoreHandler.GetComponent<Animator> ().SetTrigger ("bounce");
 			scoreFlyer.GetComponent<Text> ().text = "+" + gotScore;
-			scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly");
 
+			if (currentStreakLevel == 1) {
+				scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly1");
+			} else if (currentStreakLevel == 2) {
+				scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly2");
+			}  else if (currentStreakLevel == 3){
+				scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly3");
+			}else {
+				scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly0");
+			}
+				
 			btn.GetComponent<Animator> ().SetTrigger ("default");
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnCorrect");
 
-
-
 			if (ScoreKeep.currentMultiplier () > currentMultiplier) {
-				//STREEAK!
+				levelUpFlyer.GetComponent<Text>().text = "Score Multiplier: " + ScoreKeep.currentMultiplier () + "x";
+				levelUpFlyer.GetComponent<Animator> ().SetTrigger ("streakon");
+
 				currentStreakLevel += 1;
 				streakMode (true, currentStreakLevel);
 			}
@@ -190,8 +202,6 @@ public class game_logic : MonoBehaviour {
 				setTimersFillValues(1);
 				currentTitle = ScoreKeep.currentTitle ();
 				titleLevel.GetComponent<Text> ().text = currentTitle;
-				levelUpFlyer.GetComponent<Text> ().text = "Level up!";
-				levelUpFlyer.GetComponent<Animator> ().SetTrigger ("show");
 			}
 				
 		} else {
@@ -209,6 +219,8 @@ public class game_logic : MonoBehaviour {
 
 			btn.GetComponent<Animator> ().SetTrigger ("default");
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnWrong");
+
+			levelUpFlyer.GetComponent<Text>().text = "Score Multiplier: " + ScoreKeep.currentMultiplier () + "x";
 		}
 
 		//get new question

@@ -12,7 +12,6 @@ public class GameOverLogic : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		RestartButton.GetComponent<Animator> ().SetTrigger ("breathe");
 		RestartButton.onClick.AddListener(() => StartGame());
 		ShareButton.onClick.AddListener(() => Share());
 		QuitButton.onClick.AddListener(() => QuitGame());
@@ -20,7 +19,9 @@ public class GameOverLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (RestartButton.IsActive()) {
+			RestartButton.GetComponent<Animator> ().SetTrigger ("breathe");
+		} 
 	}
 
 	private void Share() {

@@ -202,12 +202,9 @@ public class game_logic : MonoBehaviour {
 
 			if (ScoreKeep.currentTitle () != currentTitle) {
 				//Level up!
+				ScoreKeep.currentStreak = 0;
 
-				// This will be a new level so reset isstreaking.
-				streakMode(false, 1);
-				TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("defaultColor");
-				TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("default");
-
+				streakMode (false, 1);
 				setTimersFillValues(1);
 
 				currentTitle = ScoreKeep.currentTitle ();
@@ -308,16 +305,21 @@ public class game_logic : MonoBehaviour {
 		isStreaking = streakModeOn;
 		Debug.Log ("streak:" + streakModeOn);
 		if (streakModeOn == true) {
+			Debug.Log ("STREAK ON");
+			Color temp = TimerAddTimeOverlay.color;
+			temp.a= 1f;
+			TimerAddTimeOverlay.color = temp;
 			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("streakMode");
 			UnityEngine.ParticleSystem.EmissionModule em = starsParticleSystem.emission;
 			em.rateOverTime = 50f * (currentStreakLevel + 1);
 			//starsParticleSystem.emission.SetBursts (1000);
 			starsParticleSystem.Play ();	
 		} else {
+			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("default");
 			Color temp = TimerAddTimeOverlay.color;
 			temp.a=0f;
 			TimerAddTimeOverlay.color = temp;
-			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("default");
+			Debug.Log ("STREAK OFF");
 			starsParticleSystem.Stop ();
 		}
 

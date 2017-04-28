@@ -12,6 +12,7 @@ public class GameOverLogic : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		RestartButton.GetComponent<Animator> ().SetTrigger ("breathe");
 		RestartButton.onClick.AddListener(() => StartGame());
 		ShareButton.onClick.AddListener(() => Share());
 		QuitButton.onClick.AddListener(() => QuitGame());

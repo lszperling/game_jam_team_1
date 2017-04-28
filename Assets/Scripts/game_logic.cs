@@ -203,6 +203,7 @@ public class game_logic : MonoBehaviour {
 			if (ScoreKeep.currentTitle () != currentTitle) {
 				//Level up!
 				ScoreKeep.currentStreak = 0;
+				currentStreakLevel = 0;
 
 				streakMode (false, 1);
 				setTimersFillValues(1);
@@ -251,15 +252,19 @@ public class game_logic : MonoBehaviour {
 	private void loadQuestion() {
 		int randomIndex = Random.Range (1, 3);
 
-		if (randomIndex == 1) {
-			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
-			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
-		}
 
-		else{
-			button1.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
-			button2.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
-		}
+		button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+		button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+
+//		if (randomIndex == 1) {
+//			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+//			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+//		}
+//
+//		else{
+//			button1.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+//			button2.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+//		}
 
 
 		string imagePath = "Images_animals/" + CurrentQuestion.imgID;

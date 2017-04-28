@@ -24,6 +24,11 @@ public class MainMenuLogic : MonoBehaviour {
 	public GameObject LockImage3;
 	public GameObject LockImage4;
 
+	public GameObject PlayImage2;
+	public GameObject PlayImage3;
+	public GameObject PlayImage4;
+	public GameObject PlayImage5;
+
 	public Button RulesButton;
 	public Button CreditsButton;
 	public Text HighScore;
@@ -44,32 +49,32 @@ public class MainMenuLogic : MonoBehaviour {
 
 		StartGameButton.GetComponent<Animator> ().SetTrigger ("breathe");
 
-
 		if (!PlayerPrefs.HasKey (installDateKey)) {
 			PlayerPrefs.SetString (installDateKey, System.DateTime.Now.ToString());
 		}
-
-		//StartGameButton.onClick.AddListener(() => StartGame());
 
 		StartGameButton.onClick.AddListener(() => StartGame(1));
 
 		if (Topic2Enabled()) {
 			StartGameButtonTopic2.onClick.AddListener(() => StartGame(2));
+			PlayImage2.SetActive (true);
 			StartGameButtonTopic2.GetComponent<Animator> ().SetTrigger ("breathe");
 		}
 		if (Topic3Enabled()) {
+			PlayImage3.SetActive (true);
 			StartGameButtonTopic3.onClick.AddListener(() => StartGame(3));
 			StartGameButtonTopic3.GetComponent<Animator> ().SetTrigger ("breathe");
 		}
 		if (Topic4Enabled()) {
+			PlayImage4.SetActive (true);
 			StartGameButtonTopic4.onClick.AddListener(() => StartGame(4));
 			StartGameButtonTopic4.GetComponent<Animator> ().SetTrigger ("breathe");
 		}
 		if (Topic5Enabled()) {
+			PlayImage5.SetActive (true);
 			StartGameButtonTopic5.onClick.AddListener(() => StartGame(5));
 			StartGameButtonTopic5.GetComponent<Animator> ().SetTrigger ("breathe");
 		}
-
 
 		RulesButton.onClick.AddListener(() => ShowRules());
 		CreditsButton.onClick.AddListener(() => ShowCredits());
@@ -131,21 +136,25 @@ public class MainMenuLogic : MonoBehaviour {
 		if (!Topic2Enabled()) {
 			TimeLeftUnlock.GetComponent<Text> ().text = CountdownString(timeDifference);
 			LockImage.SetActive (true);
+			PlayImage2.SetActive (false);
 			TimeLeftUnlock.GetComponent<Text> ().fontSize = 30;
 		}
 
 		if (!Topic3Enabled()) {
 			TimeLeftUnlock3.GetComponent<Text> ().text = CountdownString(timeDifference);
+			PlayImage3.SetActive (false);
 			LockImage2.SetActive (true);
 		}
 
 		if (!Topic4Enabled()) {
 			TimeLeftUnlock4.GetComponent<Text> ().text = CountdownString(timeDifference);
+			PlayImage4.SetActive (false);
 			LockImage3.SetActive (true);
 		}
 
 		if (!Topic5Enabled()) {
 			TimeLeftUnlock5.GetComponent<Text> ().text = CountdownString(timeDifference);
+			PlayImage5.SetActive (false);
 			LockImage4.SetActive (true);
 		}
 

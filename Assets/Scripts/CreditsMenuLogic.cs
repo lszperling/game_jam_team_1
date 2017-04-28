@@ -31,8 +31,8 @@ public class CreditsMenuLogic: MonoBehaviour {
 			if (TransRectTrans.sizeDelta.x >= 3400 && TransRectTrans.sizeDelta.x >= 3400) {
 				SceneManager.LoadScene ("MainMenu", LoadSceneMode.Single); 
 			} else {
-				TransHeight += 100;
-				TransWidth += 100;
+				TransHeight += 200;
+				TransWidth += 200;
 				TransRectTrans.sizeDelta = new Vector2 (TransWidth, TransHeight);
 			}		
 		}

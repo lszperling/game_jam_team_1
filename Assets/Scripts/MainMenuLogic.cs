@@ -97,8 +97,8 @@ public class MainMenuLogic : MonoBehaviour {
 			if (TransRectTrans.sizeDelta.x >= 3400 && TransRectTrans.sizeDelta.x >= 3400) {	
 				SceneManager.LoadScene ("Game", LoadSceneMode.Single); 			
 			} else {			
-				TransHeight += 100;
-				TransWidth += 100;
+				TransHeight += 200;
+				TransWidth += 200;
 				TransRectTrans.sizeDelta = new Vector2 (TransWidth, TransHeight);			
 			}		
 		} 
@@ -109,8 +109,8 @@ public class MainMenuLogic : MonoBehaviour {
 			if (TransRectTrans.sizeDelta.x >= 3400 && TransRectTrans.sizeDelta.x >= 3400) {
 				SceneManager.LoadScene ("RulesMenu", LoadSceneMode.Single); 
 			} else {
-				TransHeight += 100;
-				TransWidth += 100;
+				TransHeight += 200;
+				TransWidth += 200;
 				TransRectTrans.sizeDelta = new Vector2 (TransWidth, TransHeight);
 			}		
 		}
@@ -120,8 +120,8 @@ public class MainMenuLogic : MonoBehaviour {
 			if (TransRectTrans.sizeDelta.x >= 3400 && TransRectTrans.sizeDelta.x >= 3400) {
 				SceneManager.LoadScene ("CreditsMenu", LoadSceneMode.Single); 
 			} else {
-				TransHeight += 100;
-				TransWidth += 100;
+				TransHeight += 200;
+				TransWidth += 200;
 				TransRectTrans.sizeDelta = new Vector2 (TransWidth, TransHeight);
 			}		
 		}

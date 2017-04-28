@@ -9,7 +9,8 @@ public class game_logic : MonoBehaviour {
 
 	public Button button1;
 	public Button button2;
-	public Slider TimerSlider;
+	public Image TimerSlider;
+	public Image TimerAddTimeOverlay;
 	public Text RightText;
 	public Text WrongText;
 	public Image QuestionImage;
@@ -17,19 +18,36 @@ public class game_logic : MonoBehaviour {
 	public Button PauseButton;
 	public GameObject PlayArea;
 	public GameObject GameOver;
+	public Text FinishScore;
+	public Text HighScore;
+	public Image TransitionImage;
+	public Text scoreFlyer;
+	public Text titleLevel;
+	public Text levelUpFlyer;
+	public Text timeUpFlyer;
+	public AudioSource MusicSource;
 
-
+	private string highscoreKey = "highscore";
 	private const float TimeLimit = 0.5f;
 	private float UIUpdateTimer = TimeLimit;
 	private bool StartTimer = false;
-	private int score = 0;
-	private bool Paused = false;
+	//private bool Paused = false;
+
+	private int TransWidth;
+	private int TransHeight;
 
 	private Question CurrentQuestion;
+
+	private ScoreKeeper ScoreKeep;
+
+	private string currentTitle;
 
 	// Use this for initialization
 	void Start () {
 		CurrentQuestion = GetComponent<content> ().getQuestion();
+		ScoreKeep = GetComponent<ScoreKeeper> ();
+		currentTitle = ScoreKeep.currentTitle ();
+		titleLevel.GetComponent<Text> ().text = currentTitle;
 
 		//listeners for buttons
 		button1.onClick.AddListener(() => ButtonClicked(button1));
@@ -40,63 +58,145 @@ public class game_logic : MonoBehaviour {
 		WrongText.GetComponent<Text> ().enabled = false;
 
 		loadQuestion ();	
+
+		TransWidth = 0;
+		TransHeight = 0;
+
 	}
 
 	void FixedUpdate(){
-		TimerSlider.value -= 0.1f;
 
-		ScoreHandler.GetComponent<Text> ().text = "SCORE: " + score;
+		ScoreHandler.GetComponent<Text> ().text = "" + ScoreKeep.currentScore;
 
-		if (TimerSlider.GetComponent<Slider>().value <= 0) {
+		if (PlayArea.activeSelf) {
+			if (!MusicSource.isPlaying){
+				MusicSource.Play ();
+			}
+			float minusTime = (-0.1f * (0f + (ScoreKeep.currentLevel ()))) / 100;
+			changeTimersFillValues (minusTime);
 
-			//SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); 
-			PlayArea.SetActive(false);
-			GameOver.SetActive(true);
+			if (TimerSlider.fillAmount < 0.2f) {
+				TimerSlider.GetComponent<Animator> ().SetTrigger ("pulsate");
+			} else {
+				TimerSlider.GetComponent<Animator> ().SetTrigger ("default");
+			}
+
+			//Set pitch of music
+			float currentLevel = -1f + (float)ScoreKeep.currentLevel ();
+			MusicSource.GetComponent<AudioSource> ().pitch = 1f + (currentLevel / 10);
+
+			if (TimerSlider.GetComponent<Image> ().fillAmount <= 0) {
+
+				MusicSource.Stop ();
+				RectTransform TransRectTrans = TransitionImage.GetComponent<RectTransform> ();
+
+				if (TransRectTrans.sizeDelta.x >= 3400 && TransRectTrans.sizeDelta.x >= 3400) {
+					//SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); 
+					PlayArea.SetActive (false);
+					GameOver.SetActive (true);
+
+					FinishScore.GetComponent<Text> ().text = "" + ScoreKeep.currentScore;
+
+
+					int current_score = (int)ScoreKeep.currentScore;
+
+					int highscore = PlayerPrefs.GetInt (highscoreKey);
+					if (current_score > highscore) {
+						PlayerPrefs.SetInt (highscoreKey, current_score);
+					}
+
+					highscore = PlayerPrefs.GetInt (highscoreKey);
+					HighScore.GetComponent<Text> ().text = "" + highscore.ToString ();
+
+				} else {
+					TransHeight += 100;
+					TransWidth += 100;
+					TransRectTrans.sizeDelta = new Vector2 (TransWidth, TransHeight);
+				}
+
+				//Text final_thing;
+				//final_thing = GameObject.Find("final_score") as Text;
+				//final_thing.text = Text "hello";
+			}
+		} else {
+			MusicSource.Stop ();
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {	
-
-		if(StartTimer){
-			UIUpdateTimer -= Time.deltaTime;
-			if ( UIUpdateTimer < 0 )
-			{
-				RightText.GetComponent<Text> ().enabled = false;
-				WrongText.GetComponent<Text> ().enabled = false;
-				UIUpdateTimer = TimeLimit;
-				StartTimer = false;
+		if (PlayArea.activeSelf) {
+			if (StartTimer) {
+				UIUpdateTimer -= Time.deltaTime;
+				if (UIUpdateTimer < 0) {
+					RightText.GetComponent<Text> ().enabled = false;
+					WrongText.GetComponent<Text> ().enabled = false;
+					UIUpdateTimer = TimeLimit;
+					StartTimer = false;
+				}
 			}
 		}
 	}
 
 	public void ButtonClicked(Button btn){
+		btn.GetComponent<AudioSource> ().Play ();
+
 		if (btn.GetComponentInChildren<Text> ().text == CurrentQuestion.correct) {
-			TimerSlider.value += 2;
-			RightText.GetComponent<Text> ().enabled = true;
-			WrongText.GetComponent<Text> ().enabled = false;
+			changeTimersFillValues (0.02f * (1 + ScoreKeep.currentMultiplier()) / 2);
+			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseGreen");
+
+			timeUpFlyer.transform.position = positionForTimeUpFlyer ();
+		
 			StartTimer = true;
 
-			score += 1000;
+			float gotScore = ScoreKeep.answerCorrect ();
+			scoreFlyer.GetComponent<Text> ().text = "+" + gotScore;
+			scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly");
+
+			btn.GetComponent<Animator> ().SetTrigger ("altBtnCorrect");
+
+
+			//Debug.Log ("CURRENT TITLE:" + ScoreKeep.currentTitle());
+			if (ScoreKeep.currentTitle () != currentTitle) {
+				//Level up!
+				setTimersFillValues(1);
+				currentTitle = ScoreKeep.currentTitle ();
+				titleLevel.GetComponent<Text> ().text = currentTitle;
+				levelUpFlyer.GetComponent<Text> ().text = "Level up!";
+				levelUpFlyer.GetComponent<Animator> ().SetTrigger ("show");
+			}
 
 		} else {
-			RightText.GetComponent<Text> ().enabled = false;
-			WrongText.GetComponent<Text> ().enabled = true;
 			StartTimer = true;
-			TimerSlider.value -= 4;
+			changeTimersFillValues (-0.06f);
+			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseRed");
+			ScoreKeep.answerWrong ();
+			btn.GetComponent<Animator> ().SetTrigger ("altBtnWrong");
 		}
 
 		//get new question
 		CurrentQuestion = GetComponent<content> ().getQuestion();
 		loadQuestion ();
+	}
 
+	private Vector2 positionForTimeUpFlyer(){
+
+		float angleDegrees = (360 * TimerSlider.fillAmount) + 90;
+		//Debug.Log ("Degrees:" + angleDegrees);
+
+		float radians = angleDegrees * Mathf.Deg2Rad;
+
+		var x = Mathf.Cos(radians);
+		var y = Mathf.Sin(radians);
+		Vector2 position = new Vector2 (x, y -5);
+		return position * 3;
 	}
 
 	private void loadQuestion() {
-		//set a question
-		//QuestionText.GetComponentInChildren<Text>().text = Question;
-
 		int randomIndex = Random.Range (1, 3);
+
+		//button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+		//button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
 
 		if (randomIndex == 1) {
 			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
@@ -111,8 +211,17 @@ public class game_logic : MonoBehaviour {
 			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
 		}
 		Sprite temp = Resources.Load<Sprite>("Images/"+CurrentQuestion.imgID);
-
-		Debug.Log (""+temp.name);
 		QuestionImage.GetComponent<Image> ().sprite = temp;
 	}
+
+	private void changeTimersFillValues(float deltaValue) {
+		TimerSlider.fillAmount += deltaValue;
+		TimerAddTimeOverlay.fillAmount += deltaValue;
+	}
+
+	private void setTimersFillValues(float value){
+		TimerSlider.fillAmount = value;
+		TimerAddTimeOverlay.fillAmount = value;
+	}
+
 }

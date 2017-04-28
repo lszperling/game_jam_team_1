@@ -5,8 +5,7 @@ using UnityEngine;
 public class ScoreKeeper : MonoBehaviour {
 
 	// Use this for initialization
-
-	public int currentScore = 0;
+	public float currentScore = 0;
 	public int currentStreak = 0;
 
 	public int comboBreak1 = 3;
@@ -14,6 +13,13 @@ public class ScoreKeeper : MonoBehaviour {
 
 	public int comboBreak2 = 6;
 	public float comboMultiplier2 = 3f;
+
+	public int comboBreak3 = 10;
+	public float comboMultiplier3 = 5f;
+
+	public List<string> titles;
+
+	public List<float> titleScoreLevels;
 
 	public float timePenaltyFactor = 0.1f;
 
@@ -25,12 +31,21 @@ public class ScoreKeeper : MonoBehaviour {
 	}
 
 
-	public int currentMultiplier(){
-		float comboMultiplier;
+	public float currentMultiplier(){
+		float comboMultiplier = 1;
+
 		if (currentStreak >= comboBreak1) {
-			comboMultiplier1 = comboMultiplier1;
-		} else if (currentStreak >= comboBreak2) {
+			comboMultiplier = comboMultiplier1;
+		}
+
+		if (currentStreak >= comboBreak2) {
+
 			comboMultiplier = comboMultiplier2;
+		}
+
+		if (currentStreak >= comboBreak3) {
+
+			comboMultiplier = comboMultiplier3;
 		}
 
 		return comboMultiplier;
@@ -40,13 +55,8 @@ public class ScoreKeeper : MonoBehaviour {
 
 		float score = maxScorePerQuestion - (answerTime * scorePenaltyPerSecond);
 
-		if(currentScore >= comboBreak1 ) {
-			score = score * comboMultiplier1;
-		}
-		else if (currentScore >= comboBreak2) {
-			score = score * comboMultiplier2;
-		}
-
+		score = score * currentMultiplier ();
+		
 		currentScore += score;
 		currentStreak += 1;
 
@@ -56,7 +66,23 @@ public class ScoreKeeper : MonoBehaviour {
 	public void answerWrong(){
 		currentStreak = 0;
 	}
+		
+	public string currentTitle(){
+		return titles [currentLevel()-1];
+	}
 
+	public int currentLevel(){
+		int i = 0;
+		foreach(float scoreLevel in titleScoreLevels) {
+			if (currentScore >= scoreLevel) {
+				i += 1;
+			} else {
+				break;
+			}
+
+		}
+		return i;
+	}
 
 	// Update is called once per frame
 	void Update () {

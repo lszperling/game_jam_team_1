@@ -27,6 +27,7 @@ public class game_logic : MonoBehaviour {
 	public Text timeUpFlyer;
 	public Button rateButton;
 	public AudioSource MusicSource;
+	public ParticleSystem starsParticleSystem;
 
 
 	private string highscoreKey = "highscore";
@@ -35,6 +36,7 @@ public class game_logic : MonoBehaviour {
 	private bool StartTimer = false;
 	//private bool Paused = false;
 	private float currentMultiplier = 1;
+	private int currentStreakLevel = 0;
 
 	private int TransWidth;
 	private int TransHeight;
@@ -44,6 +46,8 @@ public class game_logic : MonoBehaviour {
 	private ScoreKeeper ScoreKeep;
 
 	private string currentTitle;
+
+	private bool isStreaking;
 
 	// Use this for initialization
 	void Start () {
@@ -66,12 +70,19 @@ public class game_logic : MonoBehaviour {
 		TransWidth = 0;
 		TransHeight = 0;
 
+		levelUpFlyer.GetComponent<Text>().text = "Очки: " + ScoreKeep.currentMultiplier () + "x";
+
 	}
 
 	void FixedUpdate(){
 
+	
 		ScoreHandler.GetComponent<Text> ().text = "" + ScoreKeep.currentScore;
 
+		if (isStreaking && !starsParticleSystem.isPlaying) {
+			starsParticleSystem.Play ();
+		}
+			
 		if (PlayArea.activeSelf) {
 			if (!MusicSource.isPlaying){
 				MusicSource.Play ();
@@ -150,7 +161,6 @@ public class game_logic : MonoBehaviour {
 		if (btn.GetComponentInChildren<Text> ().text == CurrentQuestion.correct) {
 
 			changeTimersFillValues (0.02f * (1 + ScoreKeep.currentMultiplier()) / 2);
-			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseGreen");
 
 			timeUpFlyer.transform.position = positionForTimeUpFlyer ();
 
@@ -159,43 +169,58 @@ public class game_logic : MonoBehaviour {
 			float gotScore = ScoreKeep.answerCorrect ();
 			ScoreHandler.GetComponent<Animator> ().SetTrigger ("bounce");
 			scoreFlyer.GetComponent<Text> ().text = "+" + gotScore;
-			scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly");
 
+			if (currentStreakLevel == 1) {
+				scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly1");
+			} else if (currentStreakLevel == 2) {
+				scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly2");
+			}  else if (currentStreakLevel == 3){
+				scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly3");
+			}else {
+				scoreFlyer.GetComponent<Animator> ().SetTrigger ("fly0");
+			}
+				
 			btn.GetComponent<Animator> ().SetTrigger ("default");
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnCorrect");
 
-			if (currentMultiplier != ScoreKeep.currentMultiplier ()) {
-				//STREEAK!
-				Debug.Log ("STREAAAK");
-				TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("streakMode");
-			} else {
-				TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseGreen");
+			if (ScoreKeep.currentMultiplier () > currentMultiplier) {
+				levelUpFlyer.GetComponent<Text>().text = "Очки: " + ScoreKeep.currentMultiplier () + "x";
+				levelUpFlyer.GetComponent<Animator> ().SetTrigger ("streakon");
+
+				currentStreakLevel += 1;
+				streakMode (true, currentStreakLevel);
 			}
 
 			currentMultiplier = ScoreKeep.currentMultiplier ();
+
+			if (!isStreaking) {
+				TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseGreen");
+			}
 
 			if (ScoreKeep.currentTitle () != currentTitle) {
 				//Level up!
 				setTimersFillValues(1);
 				currentTitle = ScoreKeep.currentTitle ();
 				titleLevel.GetComponent<Text> ().text = currentTitle;
-				levelUpFlyer.GetComponent<Text> ().text = "Level up!";
-				levelUpFlyer.GetComponent<Animator> ().SetTrigger ("show");
 			}
-
-
-
-
+				
 		} else {
 			StartTimer = true;
 			changeTimersFillValues (-0.06f);
-			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("default");
-			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseRed");
-			ScoreKeep.answerWrong ();
+			currentStreakLevel = 0;
+			streakMode (false, currentStreakLevel);
 
+			if (!isStreaking) {
+				TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseRed");
+			}
+
+			ScoreKeep.answerWrong ();
+			starsParticleSystem.Stop ();
 
 			btn.GetComponent<Animator> ().SetTrigger ("default");
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnWrong");
+
+			levelUpFlyer.GetComponent<Text>().text = "Очки: " + ScoreKeep.currentMultiplier () + "x";
 		}
 
 		//get new question
@@ -233,7 +258,15 @@ public class game_logic : MonoBehaviour {
 		Sprite temp = Resources.Load<Sprite>("Images/"+CurrentQuestion.imgID);
 		if (PlayerPrefs.GetInt ("selectedTopic") == 2) {
 			temp = Resources.Load<Sprite>("Images_animals/"+CurrentQuestion.imgID);
-
+		} 
+		if (PlayerPrefs.GetInt ("selectedTopic") == 3) {
+			temp = Resources.Load<Sprite>("Images_geo/"+CurrentQuestion.imgID);
+		} 
+		if (PlayerPrefs.GetInt ("selectedTopic") == 4) {
+			temp = Resources.Load<Sprite>("Images_sweetshop/"+CurrentQuestion.imgID);
+		} 
+		if (PlayerPrefs.GetInt ("selectedTopic") == 5) {
+			temp = Resources.Load<Sprite>("Images_random/"+CurrentQuestion.imgID);
 		} 
 		QuestionImage.GetComponent<Image> ().sprite = temp;
 	}
@@ -251,5 +284,24 @@ public class game_logic : MonoBehaviour {
 	private void LeaveRating(){
 		Application.OpenURL("https://play.google.com/store/apps/details?id=com.BlipBlop.Tugodumka");
 	}
+
+
+	private void streakMode(bool streakModeOn, int streakLevel) {
+		isStreaking = streakModeOn;
+		Debug.Log ("streak:" + streakModeOn);
+		if (streakModeOn == true) {
+			
+			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("streakMode");
+			UnityEngine.ParticleSystem.EmissionModule em = starsParticleSystem.emission;
+			em.rateOverTime = 50f * (currentStreakLevel + 1);
+			//starsParticleSystem.emission.SetBursts (1000);
+			starsParticleSystem.Play ();	
+		} else {
+			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("default");
+		}
+
+	}
+
+
 
 }

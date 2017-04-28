@@ -8,7 +8,7 @@ public class RulesMenuLogic : MonoBehaviour {
 
 	public Button BackToMenuButton;
 	public Button StartGameButton;
-	public Image TransImage;
+	public GameObject TransImage;
 
 	private bool StartGameClicked = false;
 	private bool BackToMenuClicked =  false;

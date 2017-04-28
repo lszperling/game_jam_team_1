@@ -14,7 +14,6 @@ public class ContentMenuLogic : MonoBehaviour {
 	public Button StartGameButtonTopic4;
 	public Button StartGameButtonTopic5;
 
-	public Button RulesButton;
 	public Text TimeLeft;
 	public Text TimeLeftUnlock;
 	public Text TimeLeftUnlock3;
@@ -117,12 +116,6 @@ public class ContentMenuLogic : MonoBehaviour {
 		Debug.Log ("aaahhh!!!!");
 		SceneManager.LoadScene ("Game", LoadSceneMode.Single); 			
 
-	}
-
-	private void ShowRules(){
-		if (!StartGameClicked) {
-			ShowRulesClicked = true;
-		}
 	}
 
 

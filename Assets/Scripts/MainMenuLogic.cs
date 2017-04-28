@@ -42,6 +42,9 @@ public class MainMenuLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+		StartGameButton.GetComponent<Animator> ().SetTrigger ("breathe");
+
+
 		if (!PlayerPrefs.HasKey (installDateKey)) {
 			PlayerPrefs.SetString (installDateKey, System.DateTime.Now.ToString());
 		}
@@ -52,15 +55,19 @@ public class MainMenuLogic : MonoBehaviour {
 
 		if (Topic2Enabled()) {
 			StartGameButtonTopic2.onClick.AddListener(() => StartGame(2));
+			StartGameButtonTopic2.GetComponent<Animator> ().SetTrigger ("breathe");
 		}
 		if (Topic3Enabled()) {
 			StartGameButtonTopic3.onClick.AddListener(() => StartGame(3));
+			StartGameButtonTopic3.GetComponent<Animator> ().SetTrigger ("breathe");
 		}
 		if (Topic4Enabled()) {
 			StartGameButtonTopic4.onClick.AddListener(() => StartGame(4));
+			StartGameButtonTopic4.GetComponent<Animator> ().SetTrigger ("breathe");
 		}
 		if (Topic5Enabled()) {
 			StartGameButtonTopic5.onClick.AddListener(() => StartGame(5));
+			StartGameButtonTopic5.GetComponent<Animator> ().SetTrigger ("breathe");
 		}
 
 

@@ -256,16 +256,15 @@ public class game_logic : MonoBehaviour {
 		button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
 		button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
 
-//		if (randomIndex == 1) {
-//			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
-//			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
-//		}
-//
-//		else{
-//			button1.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
-//			button2.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
-//		}
+		if (randomIndex == 1) {
+			button1.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+			button2.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+		}
 
+		else{
+			button1.GetComponentInChildren<Text>().text = CurrentQuestion.incorrect;
+			button2.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
+		}
 
 		string imagePath = "Images_animals/" + CurrentQuestion.imgID;
 

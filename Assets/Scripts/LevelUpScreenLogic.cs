@@ -31,6 +31,7 @@ public class LevelUpScreenLogic : MonoBehaviour {
 			//Score.GetComponent<Text> ().text = ""+Keeper.currentScore;
 		}
 		if (Keeper.currentTitle () != currentTitle) {
+			Keeper.currentStreak = 0;
 			PlayArea.SetActive (false);
 			LevelUpScreen.SetActive (true);
 		}

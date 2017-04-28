@@ -30,6 +30,12 @@ public class content : MonoBehaviour {
 		
 	private void LoadQuestions(){
 		TextAsset asset = Resources.Load (Path.Combine ("Questions", "questions")) as TextAsset;
+
+		if (PlayerPrefs.GetInt ("selectedTopic") == 2) {
+			asset = Resources.Load (Path.Combine ("Questions", "questions_animals")) as TextAsset;
+
+		} 
+
 		questionList = JsonUtility.FromJson<QuestionList> (asset.text);
 	}
 

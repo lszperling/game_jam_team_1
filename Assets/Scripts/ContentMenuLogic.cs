@@ -41,9 +41,24 @@ public class ContentMenuLogic : MonoBehaviour {
 		//StartGameButton.onClick.AddListener(() => StartGame());
 
 		StartTopics ();
-		TimeLeft.GetComponent<Text> ().text = PlayerPrefs.GetString (installDateKey).ToString();
-		TimeLeft.gameObject.SetActive(true);
+		//TimeLeft.GetComponent<Text> ().text = PlayerPrefs.GetString (installDateKey).ToString();
+		//TimeLeft.gameObject.SetActive(true);
 
+
+		StartGameButton.onClick.AddListener(() => StartGame(1));
+
+		if (Topic2Enabled()) {
+			StartGameButtonTopic2.onClick.AddListener(() => StartGame(2));
+		}
+		if (Topic3Enabled()) {
+			StartGameButtonTopic3.onClick.AddListener(() => StartGame(3));
+		}
+		if (Topic4Enabled()) {
+			StartGameButtonTopic4.onClick.AddListener(() => StartGame(4));
+		}
+		if (Topic5Enabled()) {
+			StartGameButtonTopic5.onClick.AddListener(() => StartGame(5));
+		}
 
 	}
 
@@ -97,11 +112,13 @@ public class ContentMenuLogic : MonoBehaviour {
 
 	}
 
-	private void StartGame(){
-		if (!ShowRulesClicked) {
-			StartGameClicked = true;
-		}
+	private void StartGame(int topic){
+		PlayerPrefs.SetInt("selectedTopic",topic);
+		Debug.Log ("aaahhh!!!!");
+		SceneManager.LoadScene ("Game", LoadSceneMode.Single); 			
+
 	}
+
 	private void ShowRules(){
 		if (!StartGameClicked) {
 			ShowRulesClicked = true;
@@ -140,45 +157,12 @@ public class ContentMenuLogic : MonoBehaviour {
 	}
 
 
-	private void DiplayCountdownButton(int buttonNumber){
-
-
-		/*TimeSpan timeDifference = GetTimeFromFinalDate ();
-
-
-
-		switch (GetTimeFromFinalDate ().Days) 
-		{
-		case 4:
-			StartGameButtonTopic3.gameObject.SetActive (false);
-			StartGameButtonTopic4.gameObject.SetActive (false);
-			StartGameButtonTopic5.gameObject.SetActive (false);
-			break;
-
-		case 3:
-			StartGameButtonTopic4.gameObject.SetActive (false);
-			StartGameButtonTopic5.gameObject.SetActive (false);
-			break;
-
-		case 2:
-			StartGameButtonTopic5.gameObject.SetActive (false);
-			break;
-
-		}
-
-
-
-
-		if (!Topic2Enabled()) {
-			TimeLeftUnlock.GetComponent<Text> ().text = timeDifference.Hours + ":" + 
-				timeDifference.Minutes + ":" + timeDifference.Seconds;
-			TransImage.SetActive (true);
-			TimeLeftUnlock.GetComponent<Text> ().fontSize = 30;
-		}*/
-	}
 
 	private TimeSpan GetTimeFromFinalDate(){
 		DateTime installDate = Convert.ToDateTime (PlayerPrefs.GetString (installDateKey).ToString ());
 		return installDate.AddDays(5) - System.DateTime.Now;
 	}
+
+
+
 }

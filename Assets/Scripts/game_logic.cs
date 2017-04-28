@@ -229,7 +229,12 @@ public class game_logic : MonoBehaviour {
 			button2.GetComponentInChildren<Text>().text = CurrentQuestion.correct;
 		}
 
+
 		Sprite temp = Resources.Load<Sprite>("Images/"+CurrentQuestion.imgID);
+		if (PlayerPrefs.GetInt ("selectedTopic") == 2) {
+			temp = Resources.Load<Sprite>("Images_animals/"+CurrentQuestion.imgID);
+
+		} 
 		QuestionImage.GetComponent<Image> ().sprite = temp;
 	}
 

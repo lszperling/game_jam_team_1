@@ -53,32 +53,25 @@ public class ContentMenuLogic : MonoBehaviour {
 		TimeSpan timeDifference = GetTimeFromFinalDate ();
 
 		if (!Topic2Enabled()) {
-			TimeLeftUnlock.GetComponent<Text> ().text = timeDifference.Hours + ":" + 
-				timeDifference.Minutes + ":" + timeDifference.Seconds;
+			TimeLeftUnlock.GetComponent<Text> ().text = CountdownString(timeDifference);
 			TransImage.SetActive (true);
 			TimeLeftUnlock.GetComponent<Text> ().fontSize = 30;
-			//TimeLeftUnlock.GetComponent<Text> ().fon
 		}
 
 		if (!Topic3Enabled()) {
-			TimeLeftUnlock3.GetComponent<Text> ().text = timeDifference.Hours + ":" + 
-				timeDifference.Minutes + ":" + timeDifference.Seconds;
+			TimeLeftUnlock3.GetComponent<Text> ().text = CountdownString(timeDifference);
 			TransImage3.SetActive (true);
 		}
 
 		if (!Topic4Enabled()) {
-			TimeLeftUnlock4.GetComponent<Text> ().text = timeDifference.Hours + ":" + 
-				timeDifference.Minutes + ":" + timeDifference.Seconds;
+			TimeLeftUnlock4.GetComponent<Text> ().text = CountdownString(timeDifference);
 			TransImage4.SetActive (true);
 		}
 
 		if (!Topic5Enabled()) {
-			TimeLeftUnlock5.GetComponent<Text> ().text = timeDifference.Hours + ":" + 
-				timeDifference.Minutes + ":" + timeDifference.Seconds;
+			TimeLeftUnlock5.GetComponent<Text> ().text = CountdownString(timeDifference);
 			TransImage5.SetActive (true);
 		}
-		//RulesButton.gameObject.SetActive (false);
-
 
 		Debug.Log (GetTimeFromFinalDate ().Days);
 		switch (GetTimeFromFinalDate ().Days) 
@@ -140,6 +133,12 @@ public class ContentMenuLogic : MonoBehaviour {
 	private bool Topic5Enabled(){
 		return GetTimeFromFinalDate ().Days < 1;
 	}
+
+	private String CountdownString(TimeSpan timeDifference){
+		return timeDifference.Hours + ":" + 
+			timeDifference.Minutes + ":" + timeDifference.Seconds;;
+	}
+
 
 	private void DiplayCountdownButton(int buttonNumber){
 

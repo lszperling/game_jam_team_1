@@ -149,7 +149,6 @@ public class MainMenuLogic : MonoBehaviour {
 			LockImage4.SetActive (true);
 		}
 
-		Debug.Log (GetTimeFromFinalDate ().Days);
 		switch (GetTimeFromFinalDate ().Days) 
 		{
 		case 4:

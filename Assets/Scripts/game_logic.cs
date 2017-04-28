@@ -184,7 +184,7 @@ public class game_logic : MonoBehaviour {
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnCorrect");
 
 			if (ScoreKeep.currentMultiplier () > currentMultiplier) {
-				levelUpFlyer.GetComponent<Text>().text = "Очки: " + ScoreKeep.currentMultiplier () + "x";
+				levelUpFlyer.GetComponent<Text>().text = "Бонусные очки: " + "x" + ScoreKeep.currentMultiplier ();
 				levelUpFlyer.GetComponent<Animator> ().SetTrigger ("streakon");
 
 				currentStreakLevel += 1;
@@ -220,7 +220,7 @@ public class game_logic : MonoBehaviour {
 			btn.GetComponent<Animator> ().SetTrigger ("default");
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnWrong");
 
-			levelUpFlyer.GetComponent<Text>().text = "Очки: " + ScoreKeep.currentMultiplier () + "x";
+			levelUpFlyer.GetComponent<Text>().text = "Бонусные очки: " + "x" + ScoreKeep.currentMultiplier ();
 		}
 
 		//get new question

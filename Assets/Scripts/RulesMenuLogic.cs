@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class RulesMenuLogic : MonoBehaviour {
 
 	public Button BackToMenuButton;
-	public Button StartGameButton;
 	public GameObject TransImage;
 
 	private bool StartGameClicked = false;
@@ -17,7 +16,6 @@ public class RulesMenuLogic : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		StartGameButton.onClick.AddListener(() => StartGame());
 		BackToMenuButton.onClick.AddListener(() => BackToMenu());
 
 		TransWidth = 0;
@@ -52,11 +50,6 @@ public class RulesMenuLogic : MonoBehaviour {
 		}
 	}
 
-	private void StartGame(){
-		if (!BackToMenuClicked) {
-			StartGameClicked = true;
-		}
-	}
 	private void BackToMenu(){
 		if (!StartGameClicked) {
 			BackToMenuClicked = true;

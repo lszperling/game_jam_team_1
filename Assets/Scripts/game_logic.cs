@@ -28,6 +28,7 @@ public class game_logic : MonoBehaviour {
 	public Button rateButton;
 	public AudioSource MusicSource;
 	public ParticleSystem starsParticleSystem;
+	public Text levelScore;
 
 
 	private string highscoreKey = "highscore";
@@ -82,12 +83,12 @@ public class game_logic : MonoBehaviour {
 		if (isStreaking && !starsParticleSystem.isPlaying) {
 			starsParticleSystem.Play ();
 		}
-			
+					
 		if (PlayArea.activeSelf) {
 			if (!MusicSource.isPlaying){
 				MusicSource.Play ();
 			}
-			float minusTime = (-0.1f * (0f + (ScoreKeep.currentLevel ()))) / 100;
+			float minusTime = (-0.1f * (0f + (ScoreKeep.currentLevel ()))) / 140;
 			changeTimersFillValues (minusTime);
 
 			currentMultiplier = ScoreKeep.currentMultiplier ();
@@ -111,7 +112,7 @@ public class game_logic : MonoBehaviour {
 					//SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); 
 					PlayArea.SetActive (false);
 					GameOver.SetActive (true);
-
+					levelScore.text = "" + ScoreKeep.currentTitle();
 					FinishScore.GetComponent<Text> ().text = "" + ScoreKeep.currentScore;
 
 
@@ -208,14 +209,14 @@ public class game_logic : MonoBehaviour {
 			StartTimer = true;
 			changeTimersFillValues (-0.06f);
 			currentStreakLevel = 0;
-			streakMode (false, currentStreakLevel);
 
 			if (!isStreaking) {
 				TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("singlePulseRed");
 			}
 
+			streakMode (false, currentStreakLevel);
+
 			ScoreKeep.answerWrong ();
-			starsParticleSystem.Stop ();
 
 			btn.GetComponent<Animator> ().SetTrigger ("default");
 			btn.GetComponent<Animator> ().SetTrigger ("altBtnWrong");
@@ -298,7 +299,6 @@ public class game_logic : MonoBehaviour {
 		isStreaking = streakModeOn;
 		Debug.Log ("streak:" + streakModeOn);
 		if (streakModeOn == true) {
-			
 			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("streakMode");
 			UnityEngine.ParticleSystem.EmissionModule em = starsParticleSystem.emission;
 			em.rateOverTime = 50f * (currentStreakLevel + 1);
@@ -306,6 +306,7 @@ public class game_logic : MonoBehaviour {
 			starsParticleSystem.Play ();	
 		} else {
 			TimerAddTimeOverlay.GetComponent<Animator> ().SetTrigger ("default");
+			starsParticleSystem.Stop ();
 		}
 
 	}
